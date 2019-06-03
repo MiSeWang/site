@@ -8,7 +8,7 @@ const user = {
     user: '',
     status: '',
     code: '',
-    token: getToken,
+    token: getToken(),
     loginName: '',
     name: '',
     avatar: avatorImg,
@@ -61,10 +61,13 @@ const user = {
     //用户名登录
     LoginByUsername({ commit }, userInfo) {
       const loginName = userInfo.loginName.trim();
+      //Promise 对象用于表示一个异步操作的最终状态（完成或失败），以及该异步操作的结果值。
       return new Promise((resolve, reject) => {
         authApi.login(loginName, userInfo.password).then(response => {
           const data = response.data
+          //修改store中的token
           commit('SET_TOKEN', data.token)
+          //修改cookie中的token
           setToken(data.token)
           resolve()
         }).catch(error => {
@@ -76,26 +79,35 @@ const user = {
     // 获取用户详细信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        authApi.getUserInfo(state.token).then(response => {
-          if (!response) reject('response is null');
-          if (!response.data) reject('response.data is null');
-          //如果不在这里加判断，会陷入无限循环
-          if (!response.data.perms
-            ||response.data.perms.length==0
-            ||!response.data.perms
-            ||response.data.perms.length==0){
-            commit('SET_VISITOR', true)
-          } else {
-            commit('SET_VISITOR', false)
-          }
-          commit('SET_ROLES', response.data.roles)
-          commit('SET_PERMS', response.data.perms)
-          commit('SET_LOGIN_NAME', response.data.loginName);
-          commit('SET_NAME', response.data.name);
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        if (state.token == "Test_Token") {
+          commit('SET_VISITOR', false)
+          commit('SET_ROLES', [{name:"测试管理员", val:"root"}])
+          commit('SET_PERMS', [{name:"所有权限", val:"*"}])
+          commit('SET_LOGIN_NAME', "测试用户名");
+          commit('SET_NAME', "测试名字");
+          resolve({data: {perms: [{name:"所有权限", val:"*"}]}})
+        } else {
+          authApi.getUserInfo(state.token).then(response => {
+            if (!response) reject('response is null');
+            if (!response.data) reject('response.data is null');
+            //如果不在这里加判断，会陷入无限循环
+            if (!response.data.perms
+              || response.data.perms.length == 0
+              || !response.data.perms
+              || response.data.perms.length == 0) {
+              commit('SET_VISITOR', true)
+            } else {
+              commit('SET_VISITOR', false)
+            }
+            commit('SET_ROLES', response.data.roles)
+            commit('SET_PERMS', response.data.perms)
+            commit('SET_LOGIN_NAME', response.data.loginName);
+            commit('SET_NAME', response.data.name);
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
 

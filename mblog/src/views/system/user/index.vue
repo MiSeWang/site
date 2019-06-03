@@ -11,11 +11,14 @@
       </el-tooltip>
     </el-row>
     <div style="margin-bottom: 30px;"></div>
+    <el-row>
     <!-- 添加用户 -->
-    <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleCreate" v-perm="'b:user:add'">
-      {{textMap.create}}
-    </el-button>
+      <!--<el-button type="primary" icon="el-icon-plus" size="mini" @click="handleCreate" v-perm="'b:user:add'">{{textMap.create}}</el-button>-->
+      <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleCreate">{{textMap.create}}</el-button>
 
+      <!--<el-button type="primary" icon="el-icon-delete" size="mini" @click="handleDelete(null, null)" v-perm="'b:user:delete'">{{textMap.delete}}</el-button>-->
+      <el-button type="primary" icon="el-icon-delete" size="mini" @click="handleDelete(null, null)">{{textMap.delete}}</el-button>
+    </el-row>
     <div style="margin-bottom: 30px;"></div>
     <!--列表-->
     <!--highlight-current-row：设置选中高光； border fit：设置边框 -->
@@ -24,10 +27,11 @@
               v-loading.body="tableLoading"
               element-loading-text="加载中"
               :data="tableData"
+              @selection-change="handleSelectionChange"
               border fit
               highlight-current-row>
       <!--复选框-->
-      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column type="selection" width="50" align="center" v-model="ids"/>
       <el-table-column prop="id" label="用户id" align="center"/>
       <el-table-column prop="loginName" label="登陆账号" align="center"></el-table-column>
       <el-table-column prop="name" label="昵称" align="center"></el-table-column>
@@ -56,7 +60,7 @@
           <!--<el-button @click="handleUpdateUserRoles(scope.$index,scope.row)" size="medium" type="warning" icon="el-icon-star-off" circle plain />-->
           <!--</el-tooltip>-->
           <el-tooltip content="删除" placement="top" v-if="!hasAdminRole(scope.row)">
-            <el-button @click="handleDelete(scope.$index,scope.row)" size="medium" type="danger" icon="el-icon-delete" circle plain />
+            <el-button @click="handleDelete(scope.row)" size="medium" type="danger" icon="el-icon-delete" circle plain />
           </el-tooltip>
           <!--如果是管理员则无法删除-->
           <el-popover trigger="hover" placement="top" v-else style="display: inline-block;">
@@ -84,7 +88,7 @@
               <div class="el-row">
                 <div class="el-col-8">
                   <el-form-item label="性别:">
-                    <span>{{ props.row.sex == 1 ? "男" : "女"}}</span>
+                    <span>{{ props.row.gender == 1 ? "男" : "女"}}</span>
                   </el-form-item>
                 </div>
                 <div class="el-col-8">
@@ -105,7 +109,7 @@
                   </el-form-item>
                 </div>
                 <el-form-item label="备注:">
-                  <textarea style="height: 45px; width: 300px" ></textarea>
+                  <textarea style="height: 45px; width: 300px" disabled="false">{{props.row.remarks}}</textarea>
                 </el-form-item>
               </div>
             </div>
@@ -117,10 +121,10 @@
 
     <!--弹出窗口：新增/编辑用户-->
     <!--:visible.sync 控制 dialog 是否显示-->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible"  width="60%">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" size="mini">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="10">
             <el-form-item label="登录名" prop="loginName" v-if="dialogStatus=='create'">
               <el-col :span="20">
                 <el-input v-model="temp.loginName"></el-input>
@@ -141,9 +145,11 @@
                 <el-input type="password" v-model="temp.password2"></el-input>
               </el-col>
             </el-form-item>
-            <el-form-item label="性别" v-model="temp.sex" prop="sex">
-              <el-radio label="男" content="1"></el-radio>
-              <el-radio label="女" content="2"></el-radio>
+            <el-form-item label="性别">
+              <el-radio-group v-model="gender">
+                <el-radio :label="1">男</el-radio>
+                <el-radio :label="2">女</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="邮箱" prop="email">
               <el-col :span="20">
@@ -155,19 +161,21 @@
                 <el-input v-model="temp.phone"></el-input>
               </el-col>
             </el-form-item>
-            <el-form-item label="用户类型" prop="phone">
-              <el-input v-model="temp.userType"></el-input>
-            </el-form-item>
-            <el-form-item label="是否可用" prop="phone" v-model="temp.loginFlag">
-              <el-radio label="是" content="1"></el-radio>
-              <el-radio label="否" content="2"></el-radio>
+            <!--<el-form-item label="用户类型" prop="userType">-->
+              <!--<el-input v-model="temp.userType"></el-input>-->
+            <!--</el-form-item>-->
+            <el-form-item label="是否可用">
+              <el-radio-group v-model="loginFlag">
+                <el-radio :label="1">是</el-radio>
+                <el-radio :label="0">否</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="14">
             <el-form-item label="角色">
               <template>
-                <el-checkbox-group v-model="roles" @change="handleCheckedRoleChange">
-                  <el-checkbox v-for="item in rolesTest" :label="item.id" :key="item.id">{{item.roleName}}</el-checkbox>
+                <el-checkbox-group v-model="rolesValue" @change="handleCheckedRoleChange">
+                  <el-checkbox v-for="item in roles" :label="item.id" :key="item.id">{{item.roleName}}</el-checkbox>
                 </el-checkbox-group>
               </template>
             </el-form-item>
@@ -186,6 +194,7 @@
 
 <script>
   import userApi from '@/api/user'
+  import roleApi from '@/api/role'
   import {parseTime, resetTemp} from '@/utils'
   import {root} from '@/utils/constants'
 
@@ -222,23 +231,27 @@
       };
       return {
         //测试数据roles
-        rolesTest: [
-          {id: 1, roleName: "测试一"},
-          {id: 2, roleName: "测试二"},
-          {id: 3, roleName: "测试三"},
-        ],
+        textMap: {
+          update: '编辑用户',
+          create: '创建用户',
+          delete: '删除用户',
+        },
         //格式化时间方法
         parseTime: parseTime,
         //正在读取图标
         tableLoading: false,
         tableData: [],
+        gender : '',
         roles: [],          //角色
+        rolesValue: [],     //角色值
+        ids: [],            //tableData中的下标
+        gender: 1,
+        loginFlag: 1,
         temp: {             //表单对象
-          idx: null,        //tableData中的下标
           id: null,
           loginName: null,  //用户账号
           name: null,       //用户姓名
-          sex: null,        //用户性别
+          gender: null,        //用户性别
           email: null,      //邮箱
           phone: null,      //手机
           userType: null,   //用户类型
@@ -247,11 +260,7 @@
           password2: null,
           createDate: null,
           updateDate: null,
-          roles: null       //用户角色
-        },
-        textMap: {
-          update: '编辑用户',
-          create: '创建用户'
+          roles: null,
         },
         // 校验
         rules: {
@@ -259,28 +268,39 @@
           password: [{validator: validatePassword, trigger: 'blur'}],
           password2: [{validator: validatePassword2, trigger: 'change'}]
         },
+        //弹窗状态
         dialogStatus: '',
+        //弹窗开关
         dialogFormVisible: false,
       }
     },
     created() {
       this.initData()
-      this.fetchData()
+      this.getData()
     },
     methods: {
       //角色复选框值复制到tem中
       handleCheckedRoleChange(value) {
-        this.temp.roles = this.roles;
-        console.log(this.temp)
+        this.temp.roles = value;
+        console.log("handleCheckedRoleChange",this.temp)
         // let checkedCount = value.length;
         // this.checkAll = checkedCount === this.rolesTest.length;
         // this.isIndeterminate = checkedCount > 0 && checkedCount < this.rolesTest.length;
       },
+      //复选款选中用户
+      handleSelectionChange(val){
+        this.ids = val.map((item) => {
+          return item.id
+        })
+      },
+      //弹出创建窗口
       handleCreate() {
         //清除对象所有属性
         resetTemp(this.temp)
         //对话框状态设置为创建
         this.dialogStatus = 'create'
+        this.gender = 1
+        this.loginFlag = 1,
         //开启对话框表单验证
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -289,37 +309,46 @@
         })
       },
       initData() {
-
+        //获取角色数据
+        roleApi.queryRole().then(response => {
+          let  ls_role = []
+          console.log(response)
+          for (let index in response.data.page) {
+            ls_role.push({id: response.data.page[index].id, roleName: response.data.page[index].name})
+          }
+          console.log(ls_role)
+          this.roles = ls_role;
+        })
       },
-
       hasAdminRole(row) {
         if (row && row.roleList)
           return row.roleList.some(role => role.val == root.val)
       },
-      createData() {
+      createData() {      //新建数据
         this.$refs['dataForm'].validate((valid) => {
           if (!valid) return;
+          this.temp.loginFlag = this.loginFlag;
+          this.temp.gender = this.gender;
           userApi.addUser(this.temp).then((res) => {
-            this.temp.id = res.data.id;                 //后台传回来新增记录的id
-            this.temp.createDate = res.date.createDate; //后台传回来新增记录的时间
-            this.temp.rolesList = [];
-            this.tableData.unshift(Object.assign({}, this.temp))
-            // ++this.tablePage.total
+            this.loginFlag = 1;
+            this.gender = 1;
             this.dialogFormVisible = false
             this.$message.success("添加成功")
+            this.getData()
           })
         })
       },
+      updateData(){      //更新
+
+      },
       //初始化表格数据
-      fetchData() {
-        //开始加载
+      getData() {
+        //开始加载表格
         this.tableLoading = true
         userApi.queryUser().then(res => {
           this.tableData = res.data.page;
           //结束加载
           this.tableLoading = false
-          console.log(JSON.stringify(this.tableData))
-          console.log(this.tableData)
         })
       },
       //打开单行数据详情
@@ -335,12 +364,57 @@
         $table.toggleRowExpansion(row)
       },
       //删除数据
-      handleDelete(){
-
+      handleDelete(row){
+        this.$confirm("您确认要永久删除用户吗?", "提示", confirm).then(() => {
+          if (!row){
+            userApi.deleteUser({id: this.ids, isBatch: true}).then(res => {
+              this.dialogFormVisible = false
+              this.$message.success("删除成功")
+            })
+          } else {
+            userApi.deleteUser({id: row.id, isBatch: false}).then(res => {
+              this.dialogFormVisible = false
+              this.$message.success("删除成功")
+            })
+          }
+          this.getData()
+        }).catch(() => {
+        this.$message.info("已取消删除")
+        })
       },
       //更新数据
-      handleUpdate(){
+      handleUpdate(scope,row){
+        //清除对象所有属性
+        resetTemp(this.temp)
+        //对话框状态设置为创建
+        this.dialogStatus = 'update'
+        this.$nextTick(() => {
+          //获取dataForm节点
+          this.$refs['dataForm'].clearValidate()
+        })
+        this.temp = {
+          id: row.id,
+          loginName: row.loginName,  //用户账号
+          name: row.name,       //用户姓名
+          email: row.email,      //邮箱
+          phone: row.phone,      //手机
+          password: row.password,   //密码
+          password2: row.password,
+          createDate: row.createDate,
+          updateDate: row.updateDate,
+        }
+        let lsRole = [];
+        for (let i=0; i< row.roles.length; i++){
+          lsRole.push(row.roles[i].id)
+        }
+        this.rolesValue = lsRole
+        console.log(this.rolesValue)
+        this.loginFlag = row.loginFlag;
+        this.gender = row.gender;
+        // console.log("row" , row);
 
+        //开启对话框表单验证
+        this.dialogFormVisible = true
       }
     }
   }

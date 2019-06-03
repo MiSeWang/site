@@ -63,5 +63,24 @@ request.interceptors.response.use(res => {
   }
 )
 
+function axiosPost(url, method, data){
+  return new Promise((resolve, reject) => {
+    request({
+      url: url,
+      method: method,
+      data: data
+    }).then(res => {
+      resolve(res)
+    }).catch(
+      function(error){
+        reject(error)
+      }
+    )
+  })
+}
+function axiosGet(url, data){
+
+}
+
 export default request;
 

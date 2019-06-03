@@ -22,6 +22,14 @@ export const permType = {
   BUTTON: 2,
   API: 3,
 }
+/**
+ * 返回消息类型
+ * @type {{MENU: number, BUTTON: number, API: number}}
+ */
+export const CodeType = {
+  DEFAULT_SUCC_CODE: 200,
+  DEFAULT_FAIL_CODE: 500,
+}
 
 /**
  * 下拉选择框数据：权限类型

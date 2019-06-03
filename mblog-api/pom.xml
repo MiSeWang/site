@@ -76,6 +76,14 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.1-jre</version>
+        </dependency>
+
         <!--添加redis jar包-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
@@ -88,11 +96,13 @@
             <!--<version>2.7.2</version>-->
         <!--</dependency>-->
         <!-- shiro -->
+
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-web-starter</artifactId>
             <version>1.4.0</version>
         </dependency>
+
         <!--添加热部署-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
