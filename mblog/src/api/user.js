@@ -28,6 +28,14 @@ export default {
       method: 'delete',
       data
     })
+  },
+
+  queryRoleIdsByUserId(queryParam){
+    return request({
+      url: 'sys_user/queryRoleIdsByUserId',
+      method: 'get',
+      params: queryParam
+    })
   }
 
 }

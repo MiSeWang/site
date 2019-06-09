@@ -118,4 +118,8 @@ public class SysUserController {
             return ResultMsg.succ(oper, success);
         }
     }
+
+    public ResultMsg queryRoleIdsByUserId(){
+        
+    }
 }
