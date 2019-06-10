@@ -10,13 +10,16 @@ import com.mrlv.api.vo.AuthVo;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * 用户实体类
+ */
 @TableName("sys_user")
 public class SysUser extends Model<SysUser> {
 
-    @TableId(type = IdType.AUTO)
-    private Integer id;        //用户id
+    @TableId(type = IdType.ID_WORKER_STR)
+    private String id;        //用户id
     private String name;       //用户名
-    private Integer sex;       //性别
+    private Integer gender;       //性别
     private String loginName;  //用户名
     private String password;   //密码
     private String email;      //邮箱
@@ -36,33 +39,11 @@ public class SysUser extends Model<SysUser> {
     @TableField(exist = false)
     private Set<AuthVo> perms = new HashSet<>();    //用户所有权限值，用于shiro做资源权限的判断
 
-    @Override
-    public String toString() {
-        return "SysUser{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", sex=" + sex +
-                ", loginName='" + loginName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", userType=" + userType +
-                ", avatar='" + avatar + '\'' +
-                ", loginIp='" + loginIp + '\'' +
-                ", loginDate=" + loginDate +
-                ", loginFlag=" + loginFlag +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", remarks='" + remarks + '\'' +
-                ", delFlag=" + delFlag +
-                '}';
-    }
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -74,12 +55,12 @@ public class SysUser extends Model<SysUser> {
         this.name = name;
     }
 
-    public Integer getSex() {
-        return sex;
+    public Integer getGender() {
+        return gender;
     }
 
-    public void setSex(Integer sex) {
-        this.sex = sex;
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     public String getLoginName() {

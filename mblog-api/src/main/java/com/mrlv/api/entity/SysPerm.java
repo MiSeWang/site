@@ -8,10 +8,14 @@ import com.baomidou.mybatisplus.enums.IdType;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 权限实体类
+ */
 @TableName("sys_perm")
 public class SysPerm extends Model<SysPerm> {
     //设置id为自行输入
-    @TableId(type = IdType.INPUT)
+    @TableId(type = IdType.ID_WORKER_STR)
+    private String id;          //id
     private String val;         //权限值，shiro的权限限定表达式
     private String parentVal;   //父节点权限值
     private String name;        //权限名称
@@ -21,6 +25,14 @@ public class SysPerm extends Model<SysPerm> {
     private Date updateDate;    //更新时间
     private String remarks;     //说明
     private Integer delFlag;    //删除标记：1为已删除
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getVal() {
         return val;

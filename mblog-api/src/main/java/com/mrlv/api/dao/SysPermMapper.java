@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper
 public interface SysPermMapper extends BaseMapper<SysPerm> {
 
-    List<SysPerm> getPermsByUserId(@Param("userId") Integer userId);
+    List<SysPerm> getPermsByUserId(@Param("userId") String userId);
 
 }

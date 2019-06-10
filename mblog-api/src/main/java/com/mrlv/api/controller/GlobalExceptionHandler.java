@@ -1,7 +1,7 @@
 package com.mrlv.api.controller;
 
 import com.mrlv.api.constant.Codes;
-import com.mrlv.api.vo.Result;
+import com.mrlv.api.vo.ResultMsg;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -26,21 +26,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ShiroException.class)
     @ResponseBody
-    public Result handleShiroException(ShiroException e){
+    public ResultMsg handleShiroException(ShiroException e){
         String name = e.getClass().getSimpleName();
         log.error("shiro执行出错：{}", name);
-        return new Result(name, false, Codes.SHIRO_ERR, "鉴权或者授权过程出错", null);
+        return new ResultMsg(name, false, Codes.SHIRO_ERR, "鉴权或者授权过程出错", null);
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseBody
-    public Result page401(UnauthenticatedException e) {
+    public ResultMsg page401(UnauthenticatedException e) {
         String eMsg = e.getMessage();
         if (StringUtils.startsWithIgnoreCase(eMsg,GUEST_ONLY)){
-            return new Result("Unauthenticated", false, Codes.UNAUTHEN, "只允许游客访问，若您已登录，请先退出登录", null)
+            return new ResultMsg("Unauthenticated", false, Codes.UNAUTHEN, "只允许游客访问，若您已登录，请先退出登录", null)
                     .data("detail",e.getMessage());
         }else{
-            return new Result("Unauthenticated", false, Codes.UNAUTHEN, "用户未登录", null)
+            return new ResultMsg("Unauthenticated", false, Codes.UNAUTHEN, "用户未登录", null)
                     .data("detail",e.getMessage());
         }
     }
@@ -48,8 +48,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
-    public Result page403() {
-        return new Result("Unauthorized", false, Codes.UNAUTHZ, "用户没有访问权限", null);
+    public ResultMsg page403() {
+        return new ResultMsg("Unauthorized", false, Codes.UNAUTHZ, "用户没有访问权限", null);
     }
 
 

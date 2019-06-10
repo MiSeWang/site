@@ -7,10 +7,9 @@ export default {
 
   queryUser(queryParam, pageParam){
     return request({
-      url: '/sys_user/query',
-      method:'post',
+      url: '/sys_user',
+      method:'get',
       data:{
-
       }
     })
   },
@@ -20,6 +19,22 @@ export default {
       url: '/sys_user',
       method: 'post',
       data
+    })
+  },
+
+  deleteUser(data){
+    return request({
+      url: '/sys_user',
+      method: 'delete',
+      data
+    })
+  },
+
+  queryRoleIdsByUserId(queryParam){
+    return request({
+      url: 'sys_user/queryRoleIdsByUserId',
+      method: 'get',
+      params: queryParam
     })
   }
 

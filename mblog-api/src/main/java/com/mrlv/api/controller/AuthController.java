@@ -3,9 +3,8 @@ package com.mrlv.api.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mrlv.api.constant.Codes;
-import com.mrlv.api.constant.CodesEnum;
 import com.mrlv.api.entity.SysUser;
-import com.mrlv.api.vo.Result;
+import com.mrlv.api.vo.ResultMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -33,7 +32,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("/login")
-    public Result login(@RequestBody String body){
+    public ResultMsg login(@RequestBody String body){
         String oper = "user login";
         log.info("{}, body: {}", oper, body);
         //将获取的报文转为Object
@@ -41,10 +40,10 @@ public class AuthController {
         String loginName = userObject.getString("loginName");
         String password = userObject.getString("password");
         if (StringUtils.isEmpty(loginName)){
-            return Result.fail(oper, "用户名不能为空");
+            return ResultMsg.fail(oper, "用户名不能为空");
         }
         if (StringUtils.isEmpty(password)){
-            return Result.fail(oper, "密码不能为空");
+            return ResultMsg.fail(oper, "密码不能为空");
         }
         Subject currentUser = SecurityUtils.getSubject();
         try{
@@ -59,7 +58,7 @@ public class AuthController {
 //            Set<AuthVo> perms = new HashSet<>();    //用户所有权限值，用于shiro做资源权限的判断
 //            perms.add(new AuthVo("所有权限", "*"));
 //            roles.add(new AuthVo("测试管理员", "root"));
-            return Result.succ(oper)
+            return ResultMsg.succ(oper)
                     .data("token", UUID.randomUUID().toString())
                     .data("uid",user.getId())
                     .data("nick",user.getName())
@@ -67,29 +66,29 @@ public class AuthController {
                     .data("perms",user.getPerms());
         } catch (UnknownAccountException uae) {
             log.warn("用户帐号不正确");
-            return Result.fail(oper,"用户帐号或密码不正确");
+            return ResultMsg.fail(oper,"用户帐号或密码不正确");
         } catch (IncorrectCredentialsException ice) {
             log.warn("用户密码不正确");
-            return Result.fail(oper,"用户帐号或密码不正确");
+            return ResultMsg.fail(oper,"用户帐号或密码不正确");
         } catch (LockedAccountException lae) {
             log.warn("用户帐号被锁定");
-            return Result.fail(oper,"用户帐号被锁定不可用");
+            return ResultMsg.fail(oper,"用户帐号被锁定不可用");
         } catch (AuthenticationException ae) {
             log.warn("登录出错");
-            return Result.fail(oper,"登录失败："+ae.getMessage());
+            return ResultMsg.fail(oper,"登录失败："+ae.getMessage());
         }
     }
 
     @GetMapping("/logout")
-    public Result logout(){
+    public ResultMsg logout(){
         String oper = "user logout";
         log.info("{}", oper);
         SecurityUtils.getSubject().logout();
-        return new Result(oper);
+        return new ResultMsg(oper);
     }
 
     @GetMapping("/info")
-    public Result info(){
+    public ResultMsg info(){
         String oper = "get user info";
         Subject subject = SecurityUtils.getSubject();
         Serializable sessionId = subject.getSession().getId();
@@ -98,14 +97,14 @@ public class AuthController {
         SysUser sysUser = (SysUser)subject.getPrincipal();
         if (sysUser == null){
             //告知前台，登陆session失效
-            return new Result(oper, false, Codes.SESSION_TIMEOUT, "登陆已经失效", null);
+            return new ResultMsg(oper, false, Codes.SESSION_TIMEOUT, "登陆已经失效", null);
         } else {
 //            Set<AuthVo> roles = new HashSet<>();    //用户所有角色值，用于shiro做角色权限的判断
 //            Set<AuthVo> perms = new HashSet<>();    //用户所有权限值，用于shiro做资源权限的判断
 //            perms.add(new AuthVo("所有权限", "*"));
 //            roles.add(new AuthVo("测试管理员", "root"));
             //返回登陆用户的信息给前台，含用户的所有角色和权限
-            return  Result.succ(oper)
+            return  ResultMsg.succ(oper)
                     .data("loginName",sysUser.getLoginName())
                     .data("name",sysUser.getName())
                     .data("avator","")
@@ -120,7 +119,7 @@ public class AuthController {
      * @return
      */
     @RequestMapping("/page/401")
-    public Result page401() {
+    public ResultMsg page401() {
         throw new UnauthenticatedException();
     }
 
@@ -130,7 +129,7 @@ public class AuthController {
      * @return
      */
     @RequestMapping("/page/403")
-    public Result page403() {
+    public ResultMsg page403() {
         throw new UnauthorizedException();
     }
 
@@ -139,7 +138,7 @@ public class AuthController {
      * @return
      */
     @RequestMapping("/page/index")
-    public Result pageIndex() {
-        return new Result("index",true,1,"index page",null);
+    public ResultMsg pageIndex() {
+        return new ResultMsg("index",true,1,"index page",null);
     }
 }

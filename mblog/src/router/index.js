@@ -11,7 +11,7 @@ import Layout from '../views/layout/Layout'
 
 //配置路由数组
 export const constantRouterMap = [
-  { path:'/login', component:_import('login/index'), hidden: true},
+  { path: '/login', component:_import('login/index'), hidden: true},
   { path: '/index', name: 'HelloWorld', component: _import('HelloWorld')},
   { path: '/test', name: 'test', component:_import('Test'), alias: '/t'},
   {
@@ -42,7 +42,7 @@ export const asyncRouterMap = [
       {
         path: 'role_manage',
         name: 'role_manage',
-        component: _import('system/user/index'),
+        component: _import('system/role/index'),
         meta: { perm: 'm:sys:role', title: '角色管理', icon: 'chart', noCache: true },
       },
       {
@@ -55,7 +55,7 @@ export const asyncRouterMap = [
       {
         path: 'perm_manage',
         name: 'perm_manage',
-        component: _import('system/user/index'),
+        component: _import('system/perm/index'),
         meta: { perm: 'm:sys:perm', title: '权限管理', icon: 'chart', noCache: true }
 
       },

@@ -8,10 +8,15 @@ import com.baomidou.mybatisplus.enums.IdType;
 import java.io.Serializable;
 import java.util.Date;
 
+
+/**
+ * 角色实体类
+ */
 @TableName("sys_role")
 public class SysRole extends Model<SysRole> {
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+
+    @TableId(type = IdType.ID_WORKER_STR)
+    private String id;
     private String  name;      //角色昵称
     private Integer isSys;     //是否系统数据
     private Integer useable;   //是否可用
@@ -20,11 +25,20 @@ public class SysRole extends Model<SysRole> {
     private String remarks;    //说明
     private Integer delFlag;   //删除标记
 
-    public Integer getId() {
+    public SysRole() {
+        super();
+    }
+
+    public SysRole(String id, Integer delFlag) {
+        this.id = id;
+        this.delFlag = delFlag;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
