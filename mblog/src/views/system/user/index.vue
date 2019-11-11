@@ -146,7 +146,7 @@
               </el-col>
             </el-form-item>
             <el-form-item label="性别">
-              <el-radio-group v-model="gender">
+              <el-radio-group v-model="userModel.gender">
                 <el-radio :label="1">男</el-radio>
                 <el-radio :label="2">女</el-radio>
               </el-radio-group>
@@ -165,7 +165,7 @@
               <!--<el-input v-model="userModel.userType"></el-input>-->
             <!--</el-form-item>-->
             <el-form-item label="是否可用">
-              <el-radio-group v-model="loginFlag">
+              <el-radio-group v-model="userModel.loginFlag">
                 <el-radio :label="1">是</el-radio>
                 <el-radio :label="0">否</el-radio>
               </el-radio-group>
@@ -195,8 +195,8 @@
 <script>
   import userApi from '@/api/user'
   import roleApi from '@/api/role'
-  import {parseTime, resetuserModel} from '@/utils'
-  import {root} from '@/utils/constants'
+  import {parseTime, resetModel} from '@/utils'
+  import {root, CodeType} from '@/utils/constants'
 
   export default {
     name: 'UserManage',
@@ -240,25 +240,22 @@
         //正在读取图标
         tableLoading: false,
         tableData: [],
-        gender : '',
         roles: [],          //角色复选框数据
         rolesValue: [],     //当前用户的角色值
         ids: [],            //tableData复选款id中的下标
-        gender: 1,
-        loginFlag: 1,
-        userModel: {             //表单对象
-          id: null,
-          loginName: null,  //用户账号
-          name: null,       //用户姓名
-          gender: null,        //用户性别
-          email: null,      //邮箱
-          phone: null,      //手机
-          userType: null,   //用户类型
-          loginFlag: null,  //是否可登陆
-          password: null,   //密码
-          password2: null,
-          createDate: null,
-          updateDate: null,
+        userModel: {        //表单对象
+          id: '',
+          loginName: '',  //用户账号
+          name: '',       //用户姓名
+          gender: 1,      //用户性别
+          email: '',      //邮箱
+          phone: '',      //手机
+          userType: '',   //用户类型
+          loginFlag: 1,   //是否可登陆
+          password: '',   //密码
+          password2: '',
+          createDate: '',
+          updateDate: '',
           roles: null,
         },
         // 校验
@@ -295,7 +292,7 @@
       //弹出创建窗口
       handleCreate() {
         //清除对象所有属性
-        resetuserModel(this.userModel)
+        resetModel(this.userModel)
         //对话框状态设置为创建
         this.dialogStatus = 'create'
         this.gender = 1
@@ -384,7 +381,7 @@
       //更新数据
       handleUpdate(scope,row){
         //清除对象所有属性
-        resetuserModel(this.userModel)
+//        resetModel(this.userModel)
         //对话框状态设置为创建
         this.dialogStatus = 'update'
         this.$nextTick(() => {
@@ -402,8 +399,6 @@
           createDate: row.createDate,
           updateDate: row.updateDate,
         }
-        //根据用户id获取角色
-        roleApi.
         let lsRole = [];
         for (let i=0; i< row.roles.length; i++){
           lsRole.push(row.roles[i].id)

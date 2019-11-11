@@ -30,12 +30,12 @@ export default {
     })
   },
 
-  queryRoleIdsByUserId(queryParam){
-    return request({
-      url: 'sys_user/queryRoleIdsByUserId',
-      method: 'get',
-      params: queryParam
-    })
-  }
+  // queryRoleIdsByUserId(queryParam){
+  //   return request({
+  //     url: 'sys_user/queryRoleIdsByUserId',
+  //     method: 'get',
+  //     params: queryParam
+  //   })
+  // }
 
 }

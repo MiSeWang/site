@@ -266,10 +266,13 @@ export function deepClone(source) {
 
 /**
  * 清空对象所有属性
- * @param temp
+ * @param temp 需要被清空的对象
+ * @param noTemp 不需要被清空的属性
  */
-export function resetTemp(temp) {
+export function resetModel(temp, noTemp) {
   for(let prop in temp){
+    if (noTemp.indexOf(prop))
+      continue
     temp[prop] = null;
   }
   return temp;
