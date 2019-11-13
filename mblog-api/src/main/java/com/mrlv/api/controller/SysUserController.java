@@ -119,7 +119,5 @@ public class SysUserController {
         }
     }
 
-    public ResultMsg queryRoleIdsByUserId(){
-        
-    }
+
 }

@@ -81,7 +81,7 @@
           <el-form label-position="left">
             <div class="el-col-4">
               <el-form-item style="align-content: center">
-                <img style="height: 100px; width: 100px" :src="props.row.avatar==null ?  '/static/img/icon/avator.gif': props.row.avatar">
+                <img style="height: 100px; width: 100px" :src="props.row.avatar==null ?  '/static/img/icon/avatar.gif': props.row.avatar">
               </el-form-item>
             </div>
             <div class="el-col-20">

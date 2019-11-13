@@ -1,8 +1,11 @@
-//导航栏的缓存值
+/**
+ * 导航栏的缓存值
+ * @type {{mutations: {DEL_OTHERS_VIEWS: tagsView.mutations.DEL_OTHERS_VIEWS, DEL_VISITED_VIEWS: tagsView.mutations.DEL_VISITED_VIEWS, ADD_VISITED_VIEWS: tagsView.mutations.ADD_VISITED_VIEWS, DEL_ALL_VIEWS: tagsView.mutations.DEL_ALL_VIEWS}, state: {cachedViews: [], visitedViews: []}, actions: {delOthersViews({commit: *, state: *}, *=): *, delVisitedViews({commit: *, state: *}, *=): *, addVisitedViews({commit: *}, *=): void, delAllViews({commit: *, state: *}): *}}}
+ */
 const tagsView = {
   state: {
-    visitedViews: [],
-    cachedViews: []
+    visitedViews: [], //已经拜访的页面
+    cachedViews: []   //
   },
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
