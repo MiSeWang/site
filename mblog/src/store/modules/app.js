@@ -30,6 +30,7 @@ const app = {
       state.device = device
     }
   },
+  /** 注册actions 类似vue里的 methods */
   actions: {
     //收放左侧菜单
     toggleSideBar: ({ commit }) => {

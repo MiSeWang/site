@@ -107,7 +107,7 @@ public class AuthController {
             return  ResultMsg.createSuccess()
                     .data("loginName",sysUser.getLoginName())
                     .data("name",sysUser.getName())
-                    .data("avator","")
+                    .data("avatar","")
                     .data("roles", sysUser.getRoles())
                     .data("perms", sysUser.getPerms());
         }

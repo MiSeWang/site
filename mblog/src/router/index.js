@@ -34,6 +34,7 @@ export const constantRouterMap = [
     }]
   }
 ]
+/** 所有的异步请求路由 */
 export const asyncRouterMap = [
   {
     path: '/system',
@@ -68,75 +69,6 @@ export const asyncRouterMap = [
       },
     ]
   },
-  // {
-  //   path: '/menu1',
-  //   component: Layout,
-  //   children: [{
-  //     path: 'index',
-  //     name: 'menu1',
-  //     component: _import('menu/menu1'),
-  //     meta: { perm:'m:menu1', title: '菜单1', icon: 'icon' }
-  //   }]
-  // },
-  //
-  //
-  // {
-  //   path: '/menu2',
-  //   component: Layout,
-  //   children: [{
-  //     path: 'index',
-  //     name: 'menu2',
-  //     component: _import('menu/menu2'),
-  //     meta: { perm:'m:menu2', title: '菜单2', icon: 'icon' }
-  //   }]
-  // },
-  //
-  // {
-  //   path: '/menu3',
-  //   component: Layout,
-  //   meta: {
-  //     perm:'m:menu3',
-  //     title: '菜单3',
-  //     icon: 'chart'
-  //   },
-  //   children: [
-  //     { path: 'menu3_1', component: _import('menu/menu3_1'), name: 'menu3_1', meta: { perm:'m:menu3:1', title: '菜单3-1', icon: 'chart', noCache: true }},
-  //     { path: 'menu3_2', component: _import('menu/menu3_2'), name: 'menu3_2', meta: { perm:'m:menu3:2', title: '菜单3-2', icon: 'chart', noCache: true }},
-  //     { path: 'menu3_3', component: _import('menu/menu3_3'), name: 'menu3_3', meta: { perm:'m:menu3:3', title: '菜单3-3', icon: 'chart', noCache: true }}
-  //   ]
-  // },
-  //
-  //
-  // {
-  //   path: '/menu4',
-  //   name: 'menu4',
-  //   component: Layout,
-  //   redirect: '/menu4/menu4_1/a',
-  //   meta: {
-  //     perm:'m:menu4',
-  //     title: '菜单4',
-  //     icon: 'example'
-  //   },
-  //   children: [
-  //     {
-  //       path: '/menu4/menu4_1',
-  //       name: 'menu4_1',
-  //       component: _import('menu/menu4_1/index'),
-  //       redirect: '/menu4/menu4_1/a',
-  //       meta: {
-  //         perm:'m:menu4:1',
-  //         title: '菜单4-1',
-  //         icon: 'table'
-  //       },
-  //       children: [
-  //         { path: 'a', name: 'menu4_1_a', component: _import('menu/menu4_1/a'), meta: { perm:'m:menu4:1:a', title: '菜单4-1-a' }},
-  //         { path: 'b', name: 'menu4_1_b', component: _import('menu/menu4_1/b'), meta: { perm:'m:menu4:1:b', title: '菜单4-1-b' }},
-  //         { path: 'c', name: 'menu4_1_c', component: _import('menu/menu4_1/c'), meta: { perm:'m:menu4:1:c', title: '菜单4-1-c' }}
-  //       ]
-  //     },
-  //     { path: 'menu4/menu4_2', name: 'menu4_2', icon: 'tab', component: _import('menu/menu4_2/index'), meta: {perm:'m:menu4:2', title: '菜单4-2' }}
-  //   ]
-  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

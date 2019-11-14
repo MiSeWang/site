@@ -1,10 +1,11 @@
+import { Message } from 'element-ui'  //引入消息提示组件
 import router from './router'
 import store from './store'
-import {Message} from 'element-ui'
 
-//导入nprogress是页面跳转是出现在浏览器顶部的进度条组件，同时导入样式。
+//导入NProgress是页面跳转是出现在浏览器顶部的进度条组件，同时导入样式。
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
+
 //将token中的获取cookie内的token方法引入，用于校验
 import {getToken} from '@/utils/token' // getToken from cookie
 
@@ -28,23 +29,22 @@ function hasPermission(userPerms, routerPerm) {
 //登陆页面
 const loginRoute = "/login"
 //白名单
-const whiteList = new Set([loginRoute, '/authredirect'])// no redirect whitelist
+const whiteList = new Set([loginRoute, '/system/user'])// no redirect whitelist
 
 /**
  *  router.beforeEach() 生命周期函数，加载之前执行这个方法。
  */
 router.beforeEach((to, from, next) => {
-  NProgress.start()
-  //取到本地的token
-  let token = getToken();
+  NProgress.start();        //开启进度条
+  let token = getToken();   //取到本地的token
   let hasToken = token != 'undefined' && token != undefined && token != null && token != '';
+  // 1.有token
   if (hasToken) {
-    // 1.有token
+    // 1.1 如果是去登录页，有token视为已登录，直接跳到首页
     if (to.path == loginRoute) {
-      // 1.1 如果是去登录页，有token视为已登录，直接跳到首页
-      next({path: '/'})
+      next({path: '/'});
       //如果当前页是首页，则afterEach钩子不会触发，需要手动处理进度条
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      NProgress.done()
     } else {
       // 1.2 如果不是去登录页，首先去获取用户详细信息，判断是否有访问权限
       if (store.getters.visitor) {
@@ -55,7 +55,7 @@ router.beforeEach((to, from, next) => {
         // 1.2.2 检查发现不是游客且未加载用户权限信息，应该调用接口加载用户权限信息
         // 用户刷新页面会导致vuex状态清空，或者用户首次登录，vuex中还没有权限信息。都要调用后台接口获得用户信息
         store.dispatch('GetUserInfo').then(res => {
-          // 注意:角色必须是数组! such as: [{name:'菜单1',val:'menu:1'}]
+          // 注意:权限必须是数组! such as: [{name:'菜单1',val:'menu:1'}]
           const perms = res.data.perms
           // 根据roles权限生成可访问的路由表
           store.dispatch('GenerateRoutes', {perms}).then(() => {
