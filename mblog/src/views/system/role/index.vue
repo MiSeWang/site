@@ -318,6 +318,10 @@
         this.$confirm("您确认要永久删除吗?", "提示", confirm).then(() => {
           let data = null;
           if (!row) {
+            if(this.ids == null || this.ids.length == 0){
+              this.$message.warning("请选择")
+              return;
+            }
             data = {ids: this.ids, isBatch: true}
           } else {
             data = {id: row.id, isBatch: false}
@@ -331,7 +335,7 @@
             this.getData()
           })
         }).catch(() => {
-          this.$message.info("已取消删除")
+          // this.$message.info("已取消删除")
         })
       },
       //判断是否是管理员

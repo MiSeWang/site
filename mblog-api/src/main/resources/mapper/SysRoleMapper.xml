@@ -3,6 +3,8 @@
 <mapper namespace="com.mrlv.api.dao.SysRoleMapper" >
     <select id="getRolesByUserId" resultType="com.mrlv.api.entity.SysRole">
         SELECT r.name FROM sys_user_role ur
-        LEFT JOIN sys_role r ON ur.role_id = #{userId}
+        LEFT JOIN sys_role r ON ur.role_id = #{userId} AND r.del_flag = 1
+        WHERE
+	    r. NAME IS NOT NULL
     </select>
 </mapper>

@@ -36,10 +36,10 @@ public class SysRoleController {
         try {
             log.info("{}, body: {}", oper, "");
             List<SysRole> sysRoles = sysRoleService.selectList(new EntityWrapper<SysRole>().eq("del_flag", 1));
-            return ResultMsg.succ(oper).data("page", sysRoles);
+            return ResultMsg.createSuccessDatas("page", sysRoles);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultMsg.fail(oper, "系统异常，请稍后重试");
+            return ResultMsg.createErrorMessage("系统异常，请稍后重试");
         }
     }
 
@@ -50,9 +50,7 @@ public class SysRoleController {
      */
     @PostMapping("/save")
     public ResultMsg save(@RequestBody String body){
-        String oper = "save role";
         try {
-            log.info("{}, body: {}", oper, body);
             JSONObject jsonObject = JSONObject.parseObject(body);
             List<String> perms = jsonObject.getJSONArray("perms").toJavaList(String.class);
             SysRole sysRole = new SysRole();
@@ -60,11 +58,11 @@ public class SysRoleController {
             sysRole.setRemarks(jsonObject.getString("remarks"));
             sysRole.setUseable(jsonObject.getInteger("useable"));
             sysRoleService.saveRole(sysRole, perms);
-            return ResultMsg.succ(oper, "添加成功");
+            return ResultMsg.createSuccessMessage("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResultMsg.fail(oper, "系统异常，请稍后重试");
+        return ResultMsg.createErrorMessage("系统异常，请稍后重试");
     }
 
     /**
@@ -78,10 +76,10 @@ public class SysRoleController {
         try {
             log.info("{}, body: {}", oper, roleId);
             List<String> permIds = sysRoleService.getPermIdsByRoleId(roleId);
-            return ResultMsg.succ(oper).data(permIds);
+            return ResultMsg.createSuccessData(permIds);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultMsg.fail(oper, "系统异常，请稍后重试");
+            return ResultMsg.createErrorMessage("系统异常，请稍后重试");
         }
     }
 
@@ -106,10 +104,10 @@ public class SysRoleController {
             sysRole.setUseable(useable);
             List<String> perms = (List)jsonObject.getJSONArray("perms");
             sysRoleService.updateRolePerms(sysRole, perms);
-            return ResultMsg.succ(oper).msg("更新成功");
+            return ResultMsg.createSuccessMessage("更新成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultMsg.fail(oper, "系统异常，请稍后重试");
+            return ResultMsg.createErrorMessage("系统异常，请稍后重试");
         }
     }
 
@@ -131,10 +129,10 @@ public class SysRoleController {
                 String id = jsonObject.getString("id");
                 sysRoleService.updateById(new SysRole(id, Const.delType.DEL_INVALID));
             }
-            return ResultMsg.succ(oper).msg("删除成功");
+            return ResultMsg.createSuccessMessage("删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultMsg.fail(oper, "系统异常，请稍后重试");
+            return ResultMsg.createErrorMessage("系统异常，请稍后重试");
         }
     }
 

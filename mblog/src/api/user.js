@@ -7,16 +7,16 @@ export default {
 
   queryUser(queryParam, pageParam){
     return request({
-      url: '/sys_user',
+      url: 'sysUser/queryUsers',
       method:'get',
       data:{
       }
     })
   },
 
-  addUser(data){
+  saveUser(data){
     return request({
-      url: '/sys_user',
+      url: 'sysUser/saveUser',
       method: 'post',
       data
     })
@@ -24,15 +24,15 @@ export default {
 
   deleteUser(data){
     return request({
-      url: '/sys_user',
-      method: 'delete',
+      url: 'sysUser/delUser',
+      method: 'post',
       data
     })
   },
 
   queryRoleIdsByUserId(queryParam){
     return request({
-      url: 'sys_user/queryRoleIdsByUserId',
+      url: 'sysUser/queryRoleIdsByUserId',
       method: 'get',
       params: queryParam
     })

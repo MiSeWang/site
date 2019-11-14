@@ -34,7 +34,7 @@ public interface ISysRoleService extends IService<SysRole> {
      * @param roleId
      * @return
      */
-    List<String> getPermIdsByRoleId(java.lang.String roleId);
+    List<String> getPermIdsByRoleId(String roleId);
 
     /**
      * 更新角色

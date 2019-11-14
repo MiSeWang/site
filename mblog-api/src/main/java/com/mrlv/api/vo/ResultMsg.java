@@ -4,14 +4,11 @@ import java.util.HashMap;
 
 public class ResultMsg extends HashMap<String, Object> {
     /////////////////////// 默认的键 ///////////////////////
-    public static final String KEY_OPER = "oper";
-    public static final String KEY_SUCC = "succ";
     public static final String KEY_CODE = "code";
     public static final String KEY_MSG = "msg";
     public static final String KEY_DATA = "data";
 
     /////////////////////// 默认的值 ///////////////////////
-    public static final String DEFAULT_OPER_VAL = "default";
     public static final int DEFAULT_SUCC_CODE = 200;
     public static final int DEFAULT_FAIL_CODE = 500;
     public static final String DEFAULT_SUCC_MSG = "ok";
@@ -23,20 +20,6 @@ public class ResultMsg extends HashMap<String, Object> {
      * 无参构造：操作成功返回的响应信息
      */
     public ResultMsg() {
-        this.put(KEY_OPER, DEFAULT_OPER_VAL);
-        this.put(KEY_SUCC, true);
-        this.put(KEY_CODE, DEFAULT_SUCC_CODE);
-        this.put(KEY_MSG, DEFAULT_SUCC_MSG);
-    }
-
-    /**
-     * 操作成功返回的响应信息
-     *
-     * @param operate
-     */
-    public ResultMsg(String operate) {
-        this.put(KEY_OPER, operate);
-        this.put(KEY_SUCC, true);
         this.put(KEY_CODE, DEFAULT_SUCC_CODE);
         this.put(KEY_MSG, DEFAULT_SUCC_MSG);
     }
@@ -44,15 +27,11 @@ public class ResultMsg extends HashMap<String, Object> {
     /**
      * 全参构造
      *
-     * @param operate
-     * @param success
      * @param code
      * @param msg
      * @param data
      */
-    public ResultMsg(String operate, boolean success, int code, String msg, Object data) {
-        this.put(KEY_OPER, operate);
-        this.put(KEY_SUCC, success);
+    public ResultMsg(int code, String msg, Object data) {
         this.put(KEY_CODE, code);
         this.put(KEY_MSG, msg);
         if (data != null) {
@@ -62,72 +41,59 @@ public class ResultMsg extends HashMap<String, Object> {
 
     /////////////////////// 各种简便的静态工厂方法 ///////////////////////
     ////// 操作成功的：
-    public static ResultMsg succ() {
+    public static ResultMsg createSuccess() {
         return new ResultMsg();
     }
 
-    public static ResultMsg succ(String operate) {
-        return new ResultMsg(operate, true, DEFAULT_SUCC_CODE, DEFAULT_SUCC_MSG, null);
+
+    public static ResultMsg createSuccessMessage(String message) {
+        return new ResultMsg(DEFAULT_SUCC_CODE, message, null);
     }
 
-    public static ResultMsg succ(String operate, String message) {
-        return new ResultMsg(operate, true, DEFAULT_SUCC_CODE, message, null);
+    public static ResultMsg createSuccessData(Object data) {
+        return new ResultMsg(DEFAULT_SUCC_CODE, DEFAULT_SUCC_MSG, data);
     }
 
-    public static ResultMsg succ(String operate, Object data) {
-        return new ResultMsg(operate, true, DEFAULT_SUCC_CODE, DEFAULT_SUCC_MSG, data);
-    }
-
-    public static ResultMsg succ(String operate, String dataKey, Object dataVal) {
-        return new ResultMsg(operate, true, DEFAULT_SUCC_CODE, DEFAULT_SUCC_MSG, null)
+    public static ResultMsg createSuccessDatas(String dataKey, Object dataVal) {
+        return new ResultMsg(DEFAULT_SUCC_CODE, DEFAULT_SUCC_MSG, null)
                 .data(dataKey, dataVal);
     }
 
     ////// 操作失败的：
-    public static ResultMsg fail() {
-        return new ResultMsg(DEFAULT_OPER_VAL, false, DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, null);
+    public static ResultMsg createError() {
+        return new ResultMsg(DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, null);
     }
 
-    public static ResultMsg fail(String operate) {
-        return new ResultMsg(operate, false, DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, null);
+    public static ResultMsg createErrorMessage(String message) {
+        return new ResultMsg(DEFAULT_FAIL_CODE, message, null);
     }
 
-    public static ResultMsg fail(String operate, String message) {
-        return new ResultMsg(operate, false, DEFAULT_FAIL_CODE, message, null);
+    public static ResultMsg createErrorData(Object data) {
+        return new ResultMsg(DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, data);
     }
 
-    public static ResultMsg fail(String operate, Object data) {
-        return new ResultMsg(operate, false, DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, data);
-    }
-
-    public static ResultMsg fail(String operate, String dataKey, Object dataVal) {
-        return new ResultMsg(operate, false, DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, null)
+    public static ResultMsg createErrorDatas(String dataKey, Object dataVal) {
+        return new ResultMsg(DEFAULT_FAIL_CODE, DEFAULT_FAIL_MSG, null)
                 .data(dataKey, dataVal);
     }
 
     ////// 操作动态判定成功或失败的：
-    public static ResultMsg result(String operate, boolean success) {
+    public static ResultMsg result(boolean success) {
         return new ResultMsg(
-                operate,
-                success,
                 (success ? DEFAULT_SUCC_CODE : DEFAULT_FAIL_CODE),
                 (success ? DEFAULT_SUCC_MSG : DEFAULT_FAIL_MSG),
                 null);
     }
 
-    public static ResultMsg result(String operate, boolean success, Object data) {
+    public static ResultMsg result(boolean success, Object data) {
         return new ResultMsg(
-                operate,
-                success,
                 (success ? DEFAULT_SUCC_CODE : DEFAULT_FAIL_CODE),
                 (success ? DEFAULT_SUCC_MSG : DEFAULT_FAIL_MSG),
                 data);
     }
 
-    public static ResultMsg result(String operate, boolean success, String dataKey, Object dataVal) {
+    public static ResultMsg result(boolean success, String dataKey, Object dataVal) {
         return new ResultMsg(
-                operate,
-                success,
                 (success ? DEFAULT_SUCC_CODE : DEFAULT_FAIL_CODE),
                 (success ? DEFAULT_SUCC_MSG : DEFAULT_FAIL_MSG),
                 null)
@@ -135,22 +101,6 @@ public class ResultMsg extends HashMap<String, Object> {
     }
 
     /////////////////////// 各种链式调用方法 ///////////////////////
-
-    /**
-     * 设置操作名称
-     */
-    public ResultMsg oper(String operate) {
-        this.put(KEY_OPER, operate);
-        return this;
-    }
-
-    /**
-     * 设置操作结果是否成功的标记
-     */
-    public ResultMsg succ(boolean success) {
-        this.put(KEY_SUCC, success);
-        return this;
-    }
 
     /**
      * 设置操作结果的代码

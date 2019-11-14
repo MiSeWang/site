@@ -79,6 +79,11 @@
           awesome-vue
         </a>
       </li>
+      <li>
+        <router-link to="/t"  target="_blank">
+          切换页面
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
