@@ -61,7 +61,20 @@ export const asyncRouterMap = [
       },
     ]
   },
-
+  {
+    path: '/socket',
+    name: '/socket',
+    component: _import(),
+    meta: { perm: 'm:works:socket', title: '', icon: 'chart', noCache: true },
+    children: [
+      {
+        path: 'socket_manage',
+        name: 'socket_manage',
+        component: '',
+        meta: {}
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
