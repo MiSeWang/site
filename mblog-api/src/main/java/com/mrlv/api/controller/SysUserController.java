@@ -5,9 +5,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.google.common.collect.Lists;
+import com.mrlv.api.constant.Const;
 import com.mrlv.api.entity.SysUser;
+import com.mrlv.api.service.ISysRoleService;
 import com.mrlv.api.service.ISysUserService;
+import com.mrlv.api.vo.AuthVo;
 import com.mrlv.api.vo.ResultMsg;
+import com.mrlv.api.vo.SysUserListVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -17,11 +22,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *  用户管理
  */
-@RequestMapping("/sys_user")
+@RequestMapping("/sysUser")
 @RestController
 public class SysUserController {
 
@@ -30,52 +37,42 @@ public class SysUserController {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysRoleService sysRoleService;
 
 
-    @GetMapping
-    public ResultMsg query(){
-        String oper = "query user";
-        log.info("{}, body: {}", oper, "");
-        List<SysUser> sysUsers = sysUserService.selectList(new EntityWrapper<SysUser>().eq("del_flag", 1));
-        return ResultMsg.succ(oper).data("page", sysUsers);
+    /**
+     * 查询用户管理列表数据
+     * @return
+     */
+    @GetMapping("/queryUsers")
+    public ResultMsg queryUsers(){
+        List<SysUserListVO> sysUserListVOs = sysUserService.queryUsers();
+        return ResultMsg.createSuccessDatas("page", sysUserListVOs);
     }
 
-    @PostMapping
-    public ResultMsg save(@RequestBody String body){
-        String oper = "add sys user";
-        log.info("{}, body: {}",oper,body);
-        JSONObject userObject = JSON.parseObject(body);
-        String loginName = userObject.getString("loginName");
-        String password = userObject.getString("password");
-        String name = userObject.getString("name");
-        Integer gender = userObject.getInteger("gender");
-        String email = userObject.getString("email");
-        String phone = userObject.getString("phone");
-        Integer loginFlag = userObject.getInteger("loginFlag");
-        JSONArray roles = userObject.getJSONArray("roles");
-
-        if (StringUtils.isEmpty(loginName)){
-            return ResultMsg.fail(oper, "用户账号不能为空");
+    @PostMapping("/saveUser")
+    public ResultMsg saveUser(@RequestBody String body){
+        Date date = new Date();
+        SysUser sysUser = JSON.parseObject(body, SysUser.class);
+        JSONArray roleIds = JSONObject.parseObject(body).getJSONArray("roleArray");
+        if (StringUtils.isBlank(sysUser.getId())){
+            if (StringUtils.isEmpty(sysUser.getLoginName())) {
+                return ResultMsg.createErrorMessage("用户账号不能为空");
+            }
+            SysUser userDB = sysUserService.selectOne(new EntityWrapper<SysUser>().eq("login_name", sysUser.getLoginName()));
+            if (userDB != null) {
+                return ResultMsg.createErrorMessage("用户已经注册");
+            }
+            sysUser.setCreateDate(date);
+            return ResultMsg.result(sysUserService.insertUser(sysUser, roleIds.toJavaList(String.class)));
+        } else {
+            if (StringUtils.isEmpty(sysUser.getPassword())){
+                return ResultMsg.createErrorMessage("密码不能为空");
+            }
+            sysUser.setUpdateDate(date);
+            return ResultMsg.result(sysUserService.updateUser(sysUser, roleIds.toJavaList(String.class)));
         }
-        if (StringUtils.isEmpty(password)){
-            return ResultMsg.fail(oper, "密码不能为空");
-        }
-        SysUser userDB = sysUserService.selectOne(new EntityWrapper<SysUser>().eq("login_name", loginName));
-        if (userDB != null) {
-            return ResultMsg.fail(oper, "用户已经注册");
-        }
-        Date nowDate = new Date();
-        SysUser sysUser = new SysUser();
-        sysUser.setLoginName(loginName);
-        sysUser.setPassword(password);
-        sysUser.setName(name);
-        sysUser.setGender(gender);
-        sysUser.setEmail(email);
-        sysUser.setLoginFlag(loginFlag);
-        sysUser.setPhone(phone);
-        sysUser.setCreateDate(nowDate);
-        sysUser.setUpdateDate(nowDate);
-
         //密码加密
 //        RandomNumberGenerator saltGen = new SecureRandomNumberGenerator();
 //        String salt = saltGen.nextBytes().toBase64();
@@ -83,12 +80,10 @@ public class SysUserController {
         //保存新用户数据
 //        user.setPwd(hashedPwd);
 //        user.setSalt(salt);
-        boolean success = sysUserService.insert(sysUser);
-        return ResultMsg.result(oper, success).data("id", sysUser.getId()).data("createDate", nowDate);
     }
 
-    @DeleteMapping
-    public ResultMsg delete(@RequestBody String body){
+    @PostMapping("/delUser")
+    public ResultMsg delUser(@RequestBody String body){
         String oper = "delete user";
         log.info("{}, body: {}", oper, "");
         JSONObject userObject = JSON.parseObject(body);
@@ -96,26 +91,31 @@ public class SysUserController {
         if (userObject.getBoolean("isBatch")){
             JSONArray array = userObject.getJSONArray("id");
             if (array.isEmpty()){
-                return ResultMsg.fail(oper, "无法删除用户：参数为空（用户id）");
+                return ResultMsg.createErrorMessage("无法删除用户：参数为空（用户id）");
             }
-            List<Integer> ids = array.toJavaList(Integer.class);
-            for (Integer id : ids) {
+            List<SysUser> users = Lists.newArrayList();
+            for (String id : array.toJavaList(String.class)) {
                 if (sysUser.getId().equals(id)){
-                    return ResultMsg.fail(oper, "系统限制：不能删除当前登录账号");
+                    return ResultMsg.createErrorMessage("系统限制：不能删除当前登录账号");
                 }
+                SysUser user = new SysUser();
+                user.setId(id);
+                user.setDelFlag(Const.delType.DEL_INVALID);
+                users.add(user);
             }
-            boolean success = sysUserService.deleteBatchIds(ids);
-            return ResultMsg.succ(oper, success);
+            return ResultMsg.result(sysUserService.updateBatchById(users));
         } else {
-            Integer id = userObject.getInteger("id");
+            String id = userObject.getString("id");
             if (id == null){
-                return ResultMsg.fail(oper, "无法删除用户：参数为空（用户id）");
+                return ResultMsg.createErrorMessage("无法删除用户：参数为空（用户id）");
             }
             if (sysUser.getId().equals(id)){
-                return ResultMsg.fail(oper, "系统限制：不能删除当前登录账号");
+                return ResultMsg.createErrorMessage("系统限制：不能删除当前登录账号");
             }
-            boolean success = sysUserService.deleteById(userObject.getInteger("id"));
-            return ResultMsg.succ(oper, success);
+            SysUser user = new SysUser();
+            user.setId(id);
+            user.setDelFlag(Const.delType.DEL_INVALID);
+            return ResultMsg.result(sysUserService.updateById(user));
         }
     }
 

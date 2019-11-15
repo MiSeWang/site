@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
@@ -12,7 +11,6 @@ import Layout from '../views/layout/Layout'
 //配置路由数组
 export const constantRouterMap = [
   { path: '/login', component:_import('login/index'), hidden: true},
-  { path: '/index', name: 'HelloWorld', component: _import('HelloWorld')},
   { path: '/test', name: 'test', component:_import('Test'), alias: '/t'},
   {
     path: '',
@@ -23,6 +21,16 @@ export const constantRouterMap = [
       component: _import('dashboard/index'),
       name: 'dashboard',
       meta: {title: '首页', icon: 'dashboard', noCache: true}
+    }]
+  },
+  {
+    path: '/cms',
+    component: Layout,
+    children: [{
+      path: 'article_manage',
+      name: 'article_manage',
+      component: _import('cms/article/index'),
+      meta: {title: '文章管理', icon: 'dashboard', noCache: true}
     }]
   }
 ]

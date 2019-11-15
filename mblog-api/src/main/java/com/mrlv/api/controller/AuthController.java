@@ -40,10 +40,10 @@ public class AuthController {
         String loginName = userObject.getString("loginName");
         String password = userObject.getString("password");
         if (StringUtils.isEmpty(loginName)){
-            return ResultMsg.fail(oper, "用户名不能为空");
+            return ResultMsg.createErrorMessage("用户名不能为空");
         }
         if (StringUtils.isEmpty(password)){
-            return ResultMsg.fail(oper, "密码不能为空");
+            return ResultMsg.createErrorMessage("密码不能为空");
         }
         Subject currentUser = SecurityUtils.getSubject();
         try{
@@ -58,7 +58,7 @@ public class AuthController {
 //            Set<AuthVo> perms = new HashSet<>();    //用户所有权限值，用于shiro做资源权限的判断
 //            perms.add(new AuthVo("所有权限", "*"));
 //            roles.add(new AuthVo("测试管理员", "root"));
-            return ResultMsg.succ(oper)
+            return ResultMsg.createSuccess()
                     .data("token", UUID.randomUUID().toString())
                     .data("uid",user.getId())
                     .data("nick",user.getName())
@@ -66,16 +66,16 @@ public class AuthController {
                     .data("perms",user.getPerms());
         } catch (UnknownAccountException uae) {
             log.warn("用户帐号不正确");
-            return ResultMsg.fail(oper,"用户帐号或密码不正确");
+            return ResultMsg.createErrorMessage("用户帐号或密码不正确");
         } catch (IncorrectCredentialsException ice) {
             log.warn("用户密码不正确");
-            return ResultMsg.fail(oper,"用户帐号或密码不正确");
+            return ResultMsg.createErrorMessage("用户帐号或密码不正确");
         } catch (LockedAccountException lae) {
             log.warn("用户帐号被锁定");
-            return ResultMsg.fail(oper,"用户帐号被锁定不可用");
+            return ResultMsg.createErrorMessage("用户帐号被锁定不可用");
         } catch (AuthenticationException ae) {
             log.warn("登录出错");
-            return ResultMsg.fail(oper,"登录失败："+ae.getMessage());
+            return ResultMsg.createErrorMessage("登录失败："+ae.getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ public class AuthController {
         String oper = "user logout";
         log.info("{}", oper);
         SecurityUtils.getSubject().logout();
-        return new ResultMsg(oper);
+        return new ResultMsg();
     }
 
     @GetMapping("/info")
@@ -97,14 +97,14 @@ public class AuthController {
         SysUser sysUser = (SysUser)subject.getPrincipal();
         if (sysUser == null){
             //告知前台，登陆session失效
-            return new ResultMsg(oper, false, Codes.SESSION_TIMEOUT, "登陆已经失效", null);
+            return new ResultMsg(Codes.SESSION_TIMEOUT, "登陆已经失效", null);
         } else {
 //            Set<AuthVo> roles = new HashSet<>();    //用户所有角色值，用于shiro做角色权限的判断
 //            Set<AuthVo> perms = new HashSet<>();    //用户所有权限值，用于shiro做资源权限的判断
 //            perms.add(new AuthVo("所有权限", "*"));
 //            roles.add(new AuthVo("测试管理员", "root"));
             //返回登陆用户的信息给前台，含用户的所有角色和权限
-            return  ResultMsg.succ(oper)
+            return  ResultMsg.createSuccess()
                     .data("loginName",sysUser.getLoginName())
                     .data("name",sysUser.getName())
                     .data("avatar","")
@@ -139,6 +139,6 @@ public class AuthController {
      */
     @RequestMapping("/page/index")
     public ResultMsg pageIndex() {
-        return new ResultMsg("index",true,1,"index page",null);
+        return new ResultMsg(1,"index page",null);
     }
 }

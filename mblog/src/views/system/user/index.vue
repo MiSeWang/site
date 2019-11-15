@@ -1,4 +1,4 @@
-<userModellate>
+<template>
   <div class="app-container">
     <!--查询  -->
     <el-row>
@@ -36,20 +36,20 @@
       <el-table-column prop="loginName" label="登陆账号" align="center"></el-table-column>
       <el-table-column prop="name" label="昵称" align="center"></el-table-column>
       <el-table-column label="角色" align="center">
-        <!--userModellate：自定义列模板，通过 Scoped slot 可以获取到 row, column, $index 和 store（table 内部的状态管理）的数据，用法参考 demo。-->
-        <userModellate slot-scope="scope">
+        <!--template：自定义列模板，通过 Scoped slot 可以获取到 row, column, $index 和 store（table 内部的状态管理）的数据，用法参考 demo。-->
+        <template slot-scope="scope">
           <!--<el-tag size="medium">{{ scope.row.roles }}</el-tag>-->
           <el-tag style="margin: 2px;" v-for="role in scope.row.roles" :key="role.id">{{role.name}}</el-tag>
-        </userModellate>
+        </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center">
-        <userModellate slot-scope="scope"><span v-text="parseTime(scope.row.createDate)"></span></userModellate>
+        <template slot-scope="scope"><span v-text="parseTime(scope.row.createDate)"></span></template>
       </el-table-column>
       <el-table-column label="更新时间" align="center">
-        <userModellate slot-scope="scope"><span v-text="parseTime(scope.row.updateDate)"></span></userModellate>
+        <template slot-scope="scope"><span v-text="parseTime(scope.row.updateDate)"></span></template>
       </el-table-column>
       <el-table-column label="操作" align="center">
-        <userModellate slot-scope="scope">
+        <template slot-scope="scope">
           <el-tooltip content="查看" placement="top">
             <el-button @click="handleCheck(scope.row)" size="medium" type="primary" icon="el-icon-more-outline" circle plain />
           </el-tooltip>
@@ -73,15 +73,15 @@
               <el-tag style="margin-left: 10px;" type="info">权限说明</el-tag>
             </div>
           </el-popover>
-        </userModellate>
+        </template>
       </el-table-column>
       <!-- 查看详情 -->
       <el-table-column type="expand" width="1">
-        <userModellate slot-scope="props">
+        <template slot-scope="props">
           <el-form label-position="left">
             <div class="el-col-4">
               <el-form-item style="align-content: center">
-                <img style="height: 100px; width: 100px" :src="props.row.avatar==null ?  '/static/img/icon/avatar.gif': props.row.avatar">
+                <img style="height: 100px; width: 100px" :src="props.row.avatar==null ?  '/static/img/icon/avator.gif': props.row.avatar">
               </el-form-item>
             </div>
             <div class="el-col-20">
@@ -114,14 +114,14 @@
               </div>
             </div>
           </el-form>
-        </userModellate>
+        </template>
       </el-table-column>
     </el-table>
     <div style="margin-bottom: 30px;"></div>
 
     <!--弹出窗口：新增/编辑用户-->
     <!--:visible.sync 控制 dialog 是否显示-->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible"  width="60%">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible"  width="60%" :close-on-click-modal="false">
       <el-form :rules="rules" ref="dataForm" :model="userModel" label-position="left" label-width="80px" size="mini">
         <el-row>
           <el-col :span="10">
@@ -138,11 +138,6 @@
             <el-form-item label="密码" prop="password">
               <el-col :span="20">
                 <el-input type="password" v-model="userModel.password"></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="password2">
-              <el-col :span="20">
-                <el-input type="password" v-model="userModel.password2"></el-input>
               </el-col>
             </el-form-item>
             <el-form-item label="性别">
@@ -173,11 +168,13 @@
           </el-col>
           <el-col :span="14">
             <el-form-item label="角色">
-              <userModellate>
-                <el-checkbox-group v-model="rolesValue" @change="handleCheckedRoleChange" >
-                  <el-checkbox v-for="item in roles" :label="item.id" :key="item.id">{{item.roleName}}</el-checkbox>
+              <template>
+                <el-checkbox-group v-model="userModel.roleArray">
+                  <el-checkbox v-for="item in roles" :label="item.id" :key="item.id">
+                    {{item.roleName}}
+                  </el-checkbox>
                 </el-checkbox-group>
-              </userModellate>
+              </template>
             </el-form-item>
           </el-col>
         </el-row>
@@ -185,24 +182,24 @@
       <div slot="footer" class="dialog-footer">
         <!--关闭弹出框-->
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">创建</el-button>
-        <el-button v-else type="primary" @click="updateData">确定</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="saveData()">创建</el-button>
+        <el-button v-else type="primary" @click="saveData()">确定</el-button>
       </div>
     </el-dialog>
   </div>
-</userModellate>
+</template>
 
 <script>
   import userApi from '@/api/user'
   import roleApi from '@/api/role'
-  import {parseTime, resetModel} from '@/utils'
-  import {root, CodeType} from '@/utils/constants'
+  import {parseTime, resetTemp} from '@/utils'
+  import {root} from '@/utils/constants'
 
   export default {
     name: 'UserManage',
     data() {
       let validateLoginName = (rule, value, callback) => {
-        if (this.dialogStatus == 'create' && value === '') {
+        if (this.dialogStatus == 'create' && (value == null || value == '')) {
           callback(new Error('必填'));
         } else {
           callback();
@@ -210,21 +207,8 @@
       };
 
       let validatePassword = (rule, value, callback) => {
-        if (value === '') {
+        if (value == null || value == '') {
           callback(new Error('请输入密码'));
-        } else {
-          if (this.userModel.password2 !== '') {
-            this.$refs.dataForm.validateField('password2');
-          }
-          callback();
-        }
-      };
-
-      let validatePassword2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value != this.userModel.password) {
-          callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
         }
@@ -239,30 +223,26 @@
         parseTime: parseTime,
         //正在读取图标
         tableLoading: false,
+        //列表数据
         tableData: [],
-        roles: [],          //角色复选框数据
-        rolesValue: [],     //当前用户的角色值
         ids: [],            //tableData复选款id中的下标
+        roles: [],          //可选的角色数据
         userModel: {        //表单对象
-          id: '',
-          loginName: '',  //用户账号
-          name: '',       //用户姓名
-          gender: 1,      //用户性别
-          email: '',      //邮箱
-          phone: '',      //手机
-          userType: '',   //用户类型
-          loginFlag: 1,   //是否可登陆
-          password: '',   //密码
-          password2: '',
-          createDate: '',
-          updateDate: '',
-          roles: null,
+          id: null,
+          loginName: null,  //用户账号
+          password: null,   //密码
+          name: null,       //用户姓名
+          gender: 1,        //用户性别
+          email: null,      //邮箱
+          phone: null,      //手机
+          userType: null,   //用户类型
+          loginFlag: 1,     //是否可登陆
+          roleArray: [],        //角色
         },
         // 校验
         rules: {
           loginName: [{validator: validateLoginName, trigger: 'blur'}],
           password: [{validator: validatePassword, trigger: 'blur'}],
-          password2: [{validator: validatePassword2, trigger: 'change'}]
         },
         //弹窗状态
         dialogStatus: '',
@@ -271,48 +251,23 @@
       }
     },
     created() {
-      this.initData()
+      this.initRoleData()
       this.getData()
     },
     methods: {
-      //角色复选框值复制到tem中
-      handleCheckedRoleChange(value) {
-        this.userModel.roles = value;
-        console.log("handleCheckedRoleChange",this.userModel)
-        // let checkedCount = value.length;
-        // this.checkAll = checkedCount === this.rolesTest.length;
-        // this.isIndeterminate = checkedCount > 0 && checkedCount < this.rolesTest.length;
-      },
       //复选款选中用户
       handleSelectionChange(val){
         this.ids = val.map((item) => {
           return item.id
         })
       },
-      //弹出创建窗口
-      handleCreate() {
-        //清除对象所有属性
-        resetModel(this.userModel)
-        //对话框状态设置为创建
-        this.dialogStatus = 'create'
-        this.gender = 1
-        this.loginFlag = 1,
-        //开启对话框表单验证
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          //获取dataForm节点
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      initData() {
+      initRoleData() {
         //获取角色数据
         roleApi.queryRole().then(response => {
           let  ls_role = []
-          console.log(response)
           for (let index in response.data.page) {
             ls_role.push({id: response.data.page[index].id, roleName: response.data.page[index].name})
           }
-          console.log(ls_role)
           this.roles = ls_role;
         })
       },
@@ -320,22 +275,53 @@
         if (row && row.roleList)
           return row.roleList.some(role => role.val == root.val)
       },
-      createData() {      //新建数据
+      //打开创建窗口
+      handleCreate() {
+        //清除对象所有属性
+        this.cleanDialog();
+        //对话框状态设置为创建
+        this.dialogStatus = 'create'
+        this.$nextTick(() => {
+          //获取dataForm节点
+          this.$refs['dataForm'].clearValidate()
+        })
+        this.dialogFormVisible = true
+      },
+      //打开更新弹框
+      handleUpdate(scope,row){
+        this.userModel = {
+          id: row.id,
+          loginName: row.loginName, //用户账号
+          password: row.password,   //密码
+          name: row.name,           //用户姓名
+          gender: row.gender,       //性别
+          email: row.email,         //邮箱
+          phone: row.phone,         //手机
+          loginFlag: row.loginFlag, //是否可登陆
+          roleArray: row.roles.map(e=>{return e.id})  //角色
+        }
+        //对话框状态设置为创建
+        this.dialogStatus = 'update'
+        this.$nextTick(() => {
+          //获取dataForm节点
+          this.$refs['dataForm'].clearValidate()
+        })
+        this.dialogFormVisible = true
+      },
+      //保存数据
+      saveData() {
         this.$refs['dataForm'].validate((valid) => {
           if (!valid) return;
-          this.userModel.loginFlag = this.loginFlag;
-          this.userModel.gender = this.gender;
-          userApi.addUser(this.userModel).then((res) => {
-            this.loginFlag = 1;
-            this.gender = 1;
-            this.dialogFormVisible = false
-            this.$message.success("添加成功")
-            this.getData()
+          userApi.saveUser(this.userModel).then((response) => {
+            if (response.data.code == 200) {
+              this.getData()
+              this.dialogFormVisible = false
+              this.$message.success(response.data.msg)
+            } else {
+              this.$message.error("")
+            }
           })
         })
-      },
-      updateData(){      //更新
-
       },
       //初始化表格数据
       getData() {
@@ -350,7 +336,6 @@
       //打开用户下拉
       handleCheck(row) {
         const $table = this.$refs.table
-        // $table.toggleRowExpansion(row)
         $table.toggleRowSelection(row)
         this.tableData.map((item) => {
           if (row.id != item.id) {
@@ -363,54 +348,40 @@
       handleDelete(row){
         this.$confirm("您确认要永久删除用户吗?", "提示", confirm).then(() => {
           if (!row){
+            if(this.ids == null || this.ids.length == 0){
+              this.$message.warning("请选择")
+              return;
+            }
             userApi.deleteUser({id: this.ids, isBatch: true}).then(res => {
               this.dialogFormVisible = false
               this.$message.success("删除成功")
+              this.getData()
             })
           } else {
             userApi.deleteUser({id: row.id, isBatch: false}).then(res => {
               this.dialogFormVisible = false
               this.$message.success("删除成功")
+              this.getData()
             })
           }
-          this.getData()
         }).catch(() => {
-        this.$message.info("已取消删除")
+        // this.$message.info("已取消删除")
         })
       },
-      //更新数据
-      handleUpdate(scope,row){
-        //清除对象所有属性
-//        resetModel(this.userModel)
-        //对话框状态设置为创建
-        this.dialogStatus = 'update'
-        this.$nextTick(() => {
-          //获取dataForm节点
-          this.$refs['dataForm'].clearValidate()
-        })
-        this.userModel = {
-          id: row.id,
-          loginName: row.loginName,  //用户账号
-          name: row.name,       //用户姓名
-          email: row.email,      //邮箱
-          phone: row.phone,      //手机
-          password: row.password,   //密码
-          password2: row.password,
-          createDate: row.createDate,
-          updateDate: row.updateDate,
-        }
-        let lsRole = [];
-        for (let i=0; i< row.roles.length; i++){
-          lsRole.push(row.roles[i].id)
-        }
-        this.loginFlag = row.loginFlag;
-        this.gender = row.gender;
-        this.rolesValue = lsRole
-        console.log(this.rolesValue)
-        // console.log("row" , row);
 
-        //开启对话框表单验证
-        this.dialogFormVisible = true
+      cleanDialog(){
+        this.userModel =  {        //表单对象
+          id: null,
+          loginName: null,  //用户账号
+          password: null,   //密码
+          name: null,       //用户姓名
+          gender: 1,        //用户性别
+          email: null,      //邮箱
+          phone: null,      //手机
+          userType: null,   //用户类型
+          loginFlag: 1,     //是否可登陆
+          roleArray: [],    //角色
+        }
       }
     }
   }

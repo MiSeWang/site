@@ -1,4 +1,4 @@
-<!-- 菜单栏组件 -->
+<!-- 面板屑组件 -->
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
@@ -34,7 +34,7 @@
           // console.log("t1:" + item)
           return item.name})
         // console.log(this.$route)
-        // console.log(matched)
+        console.log(matched)
         const first = matched[0]
         if (first && first.name !== 'dashboard') {
           matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)

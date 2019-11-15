@@ -31,6 +31,6 @@ public class SysPermController {
         String oper = "query perm by permType";
         log.info("permType: {}", permType);
         List<PermTreeVo> sysPerms = sysPermService.getPermTreeVo(permType);
-        return ResultMsg.succ(oper, sysPerms);
+        return ResultMsg.createSuccessData(sysPerms);
     }
 }

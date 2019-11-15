@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,7 +28,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Set<AuthVo> getRolesByUserId(String userId) {
         List<SysRole> list = baseMapper.getRolesByUserId(userId);
-        return list.stream().map(r -> new AuthVo(r.getName(), r.getName())).collect(Collectors.toSet());
+        Set<AuthVo> set = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            set.add(new AuthVo(list.get(i).getName(), list.get(i).getName()));
+        }
+        return set;
     }
 
 
@@ -46,7 +51,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         baseMapper.insert(sysRole);
         if (perms != null && perms.size() != 0){
             List<SysRolePerm> sysRolePerms = perms.stream().map((e) -> new SysRolePerm(sysRole.getId(), e)).collect(Collectors.toList());
-            sysRolePermMapper.insertBatch(sysRolePerms);
+            if (sysRolePerms != null && sysRolePerms.size() > 0) {
+                sysRolePermMapper.insertBatch(sysRolePerms);
+            }
         }
     }
 
@@ -55,8 +62,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public void updateRolePerms(SysRole sysRole, List<String> permsId) {
         baseMapper.updateById(sysRole);
         sysRolePermMapper.delete(new EntityWrapper<SysRolePerm>().eq("role_id", sysRole.getId()));
-        List<SysRolePerm> collect = permsId.stream().map((e) -> new SysRolePerm(sysRole.getId(), e)).collect(Collectors.toList());
-        sysRolePermMapper.insertBatch(collect);
+        List<SysRolePerm> sysRolePerms = permsId.stream().map((e) -> new SysRolePerm(sysRole.getId(), e)).collect(Collectors.toList());
+        if (sysRolePerms != null && sysRolePerms.size() > 0) {
+            sysRolePermMapper.insertBatch(sysRolePerms);
+        }
     }
 
 }
