@@ -9,3 +9,5 @@ out
 gen
 /logs
 /mblog/dev
+/mblog-api/logs
+/mblog-api/logs
