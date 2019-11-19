@@ -9,9 +9,10 @@ const _import = require('./_import_' + process.env.NODE_ENV)
 import Layout from '../views/layout/Layout'
 
 //配置路由数组
-export const constantRouterMap = [
-  { path: '/login', component:_import('login/index'), hidden: true},
-  { path: '/test', name: 'test', component:_import('Test'), alias: '/t'},
+export let constantRouterMap;
+constantRouterMap = [
+  {path: '/login', component: _import('login/index'), hidden: true},
+  {path: '/test', name: 'test', component: _import('Test'), alias: '/t'},
   {
     path: '',
     component: Layout,
@@ -32,8 +33,21 @@ export const constantRouterMap = [
       component: _import('cms/article/index'),
       meta: {title: '文章管理', icon: 'dashboard', noCache: true}
     }]
-  }
-]
+  },
+  {
+    path: '/works',
+    component: Layout,
+    // meta: { perm:'m:sys', title: '系统', icon: 'chart' },
+    children: [
+      {
+        path: 'socket',
+        name: 'socket',
+        component: _import('works/socket/index'),
+        meta: {title: 'Socket', icon: 'dashboard', noCache: true}
+      }
+    ]
+  },
+];
 /** 所有的异步请求路由 */
 export const asyncRouterMap = [
   {
@@ -67,20 +81,6 @@ export const asyncRouterMap = [
         meta: { perm: 'm:sys:perm', title: '权限管理', icon: 'chart', noCache: true }
 
       },
-    ]
-  },
-  {
-    path: '/socket',
-    name: '/socket',
-    component: _import(),
-    meta: { perm: 'm:works:socket', title: '', icon: 'chart', noCache: true },
-    children: [
-      {
-        path: 'socket_manage',
-        name: 'socket_manage',
-        component: '',
-        meta: {}
-      }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

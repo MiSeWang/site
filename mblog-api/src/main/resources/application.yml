@@ -16,7 +16,7 @@ spring:
     port: 6379
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${db}?characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://66.42.42.148:3306/${db}?characterEncoding=UTF-8&useSSL=false
     username: root
     password: 123456
 
