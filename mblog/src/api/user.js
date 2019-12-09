@@ -5,16 +5,15 @@ import request from '@/utils/request';
 
 export default {
 
-  queryUser(queryParam, pageParam){
+  queryUser(queryParam, pageParam) {
     return request({
       url: 'sysUser/queryUsers',
-      method:'get',
-      data:{
-      }
+      method: 'get',
+      data: {}
     })
   },
 
-  saveUser(data){
+  saveUser(data) {
     return request({
       url: 'sysUser/saveUser',
       method: 'post',
@@ -22,7 +21,7 @@ export default {
     })
   },
 
-  deleteUser(data){
+  deleteUser(data) {
     return request({
       url: 'sysUser/delUser',
       method: 'post',
@@ -30,7 +29,7 @@ export default {
     })
   },
 
-  queryRoleIdsByUserId(queryParam){
+  queryRoleIdsByUserId(queryParam) {
     return request({
       url: 'sysUser/queryRoleIdsByUserId',
       method: 'get',

@@ -2,6 +2,7 @@ package com.mrlv.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mrlv.api.constant.SocketCode;
+import com.mrlv.api.utils.SocketSendUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -47,10 +48,10 @@ public class WebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-//        try {
+        try {
             JSONObject request = JSONObject.parseObject(message);
             SocketCode code = SocketCode.getSocketCode(request.getInteger("code"));
-//            switch (code) {
+            switch (code) {
 //                case EVENT_MESSAGE:
 //                    JSONObject data = JSONObject.parseObject(request.getString("data"));
 //                    IEventMessageService eventMessageService = SpringUtils.getBean("eventMessageService", IEventMessageService.class);
@@ -67,15 +68,14 @@ public class WebSocket {
 //                        }
 //                    }
 //                    break;
-//                case HEARTBEAT:
-//                    sendInfo(SocketSendUtils.sendJson(SocketCode.HEARTBEAT, "60s一次的检查"), this.loginName);
-//                    break;
-//
-//            }
-//        } catch (IOException e) {
-//            session.getBasicRemote().sendText(SocketSendUtils.sendJson(SocketCode.EXECUTE_ERROR, "数据执行处理错误"));
-//            logger.error("数据执行处理错误!{}");
-//        }
+                case HEARTBEAT:
+                    sendInfo(SocketSendUtils.sendJson(SocketCode.HEARTBEAT, "60s一次的检查"), this.loginName);
+                    break;
+            }
+        } catch (IOException e) {
+            session.getBasicRemote().sendText(SocketSendUtils.sendJson(SocketCode.EXECUTE_ERROR, "数据执行处理错误"));
+            logger.error("数据执行处理错误!{}");
+        }
     }
 
     /**

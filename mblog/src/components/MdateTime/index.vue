@@ -1,3 +1,4 @@
+<!--自定义时间组件-->
 <template>
   <div id="my_dialog" class="my_dialog" v-if="openDialog" v-model="openDialog" prevent-close
             @show="gearDateInit">

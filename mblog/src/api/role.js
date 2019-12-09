@@ -5,36 +5,40 @@
 import request from '@/utils/request';
 
 export default {
-
-  queryRole(queryParam, pageParam){
+  /** 查询角色 */
+  queryRole(queryParam, pageParam) {
     return request({
       url: '/sys_role/query',
-      method:'get',
+      method: 'get',
       params: queryParam
     })
   },
-  addRole(data){
+  /** 添加角色 */
+  addRole(data) {
     return request({
       url: '/sys_role/save',
       method: 'post',
       data
     })
   },
-  updateRole(data){
+  /** 更新角色 */
+  updateRole(data) {
     return request({
-      url:'/sys_role/update',
+      url: '/sys_role/update',
       method: 'post',
       data
     })
   },
-  deleteRole(data){
+  /** 删除角色 */
+  deleteRole(data) {
     return request({
       url: '/sys_role/delete',
-      method:'post',
+      method: 'post',
       data
     })
   },
-  queryPermIdsByRoleId(queryParam){
+  /** 根据角色id获取对应菜单那权限 */
+  queryPermIdsByRoleId(queryParam) {
     return request({
       url: 'sys_role/queryPermIdsByRoleId',
       method: 'get',

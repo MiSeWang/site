@@ -10,6 +10,7 @@ import getters from './getters'
 
 Vue.use(Vuex)
 
+//Vuex主配置文件
 const store = new Vuex.Store({
   modules: {
     app,

@@ -1,4 +1,4 @@
-<!--图标组件-->
+<!-- 图标组件 -->
 <template>
   <svg :class="svgClass" aria-hidden="true">
     <use :xlink:href="iconName"></use>

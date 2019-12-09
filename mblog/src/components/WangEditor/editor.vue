@@ -1,3 +1,4 @@
+<!--富文本编辑器-->
 <template>
   <div class="editor">
     <div ref="editorElem" style="text-align:left">

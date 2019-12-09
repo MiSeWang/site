@@ -1,7 +1,7 @@
 import Cookie from 'js-cookie';
 
 const TokenKey = 'Admin-Token';
-
+//本地Token管理
 export function getToken(){
   return Cookie.get(TokenKey);
 }

@@ -1,3 +1,4 @@
+<!--显示异常组件-->
 <template>
   <div v-if="errorLogs.length>0">
     <el-badge :is-dot="true" style="line-height: 30px;" @click.native="dialogTableVisible=true">
