@@ -124,7 +124,16 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
+        </dependency>
     </dependencies>
+
+
 
     <build>
         <plugins>
@@ -135,7 +144,7 @@
                     <!-- 跳过单元测试 -->
                     <skip>true</skip>
                     <!--如果入口函数不在根目录，配置入口函数-->
-                    <mainClass>com.mrlv.api.MblogApiApplication</mainClass>
+                    <!--<mainClass>com.mrlv.api.MblogApiApplication</mainClass>-->
                 </configuration>
             </plugin>
         </plugins>
