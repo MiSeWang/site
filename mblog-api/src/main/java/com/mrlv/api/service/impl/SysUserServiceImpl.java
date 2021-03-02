@@ -2,8 +2,8 @@ package com.mrlv.api.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.mrlv.api.dao.SysUserMapper;
-import com.mrlv.api.dao.SysUserRoleMapper;
+import com.mrlv.api.mapper.SysUserMapper;
+import com.mrlv.api.mapper.SysUserRoleMapper;
 import com.mrlv.api.entity.SysUser;
 import com.mrlv.api.entity.SysUserRole;
 import com.mrlv.api.service.ISysUserService;

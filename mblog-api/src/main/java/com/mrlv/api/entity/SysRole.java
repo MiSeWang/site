@@ -19,7 +19,7 @@ public class SysRole extends Model<SysRole> {
     private String id;
     private String  name;      //角色昵称
     private Integer isSys;     //是否系统数据
-    private Integer useable;   //是否可用
+    private Integer status;   //是否可用
     private Date createDate;   //创建日期
     private Date updateDate;   //更新日期
     private String remarks;    //说明
@@ -58,12 +58,12 @@ public class SysRole extends Model<SysRole> {
         this.isSys = isSys;
     }
 
-    public Integer getUseable() {
-        return useable;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setUseable(Integer useable) {
-        this.useable = useable;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCreateDate() {

@@ -5,6 +5,14 @@ import request from '@/utils/request';
 
 export default {
 
+
+  queryArticleById(queryParam){
+    return request({
+      url: 'cmsArticle/queryArticleById',
+      method:'get',
+      params: queryParam
+    })
+  },
   queryArticle(queryParam, pageParam){
     return request({
       url: 'cmsArticle/queryArticles',
@@ -15,9 +23,16 @@ export default {
   },
   saveArticle(data){
     return request({
-      url: 'sysUser/saveUser',
+      url: 'cmsArticle/saveArticle',
       method: 'post',
-      data
+      data: data
+    })
+  },
+  delArticle(data){
+    return request({
+      url: 'cmsArticle/delArticle',
+      method: 'post',
+      data: data
     })
   },
 }

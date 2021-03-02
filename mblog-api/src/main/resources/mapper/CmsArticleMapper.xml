@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mrlv.api.dao.CmsArticleMapper">
+<mapper namespace="com.mrlv.api.mapper.CmsArticleMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.mrlv.api.entity.CmsArticle">
@@ -18,10 +18,10 @@
         <result column="posid" property="posid" />
         <result column="custom_content_view" property="customContentView" />
         <result column="view_config" property="viewConfig" />
-        <result column="create_by" property="createBy" />
-        <result column="create_date" property="createDate" />
-        <result column="update_by" property="updateBy" />
-        <result column="update_date" property="updateDate" />
+        <result column="creator" property="creator" />
+        <result column="create_time" property="createTime" />
+        <result column="updater" property="updater" />
+        <result column="update_time" property="updateTime" />
         <result column="remarks" property="remarks" />
         <result column="del_flag" property="delFlag" />
     </resultMap>
@@ -39,19 +39,30 @@
         c1.weight_date,
         c1.hits,
         c1.posid,
-        c1.create_by,
-        c1.create_date,
-        c1.update_by,
-        c1.update_date,
-        c1.remarks,
-        c2.`label` as categoryName
+        c1.creator,
+        c1.create_time,
+        c1.updater,
+        c1.update_time,
+        c1.remarks
     </sql>
 
     <select id="queryArticles" resultType="com.mrlv.api.vo.ArticleListVO">
       SELECT
        <include refid="articles"/>
+        ,
+        c2.`label` as categoryName
       FROM
         cms_article c1
-      LEFT JOIN cms_article_dict c2 ON c1.category_id = c2.id
+      LEFT JOIN cms_article_dict c2 ON c1.category_id = c2.id WHERE c1.del_flag = 1
+    </select>
+
+    <select id="queryArticleById" resultType="com.mrlv.api.vo.ArticleDetailVO">
+        SELECT
+        <include refid="articles"/>
+        ,
+        c2.`content`
+        FROM
+        cms_article c1
+        LEFT JOIN cms_article_data c2 ON c1.id = c2.article_id WHERE c1.id = #{id}
     </select>
 </mapper>

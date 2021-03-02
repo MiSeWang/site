@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 统一捕获异常,返给前台一个json信息,前台根据这个json信息显示对应的提示,或者做页面的跳转
  */
@@ -26,7 +28,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ShiroException.class)
     @ResponseBody
-    public ResultMsg handleShiroException(ShiroException e){
+    public ResultMsg handleShiroException(ShiroException e, HttpServletResponse response){
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("contentType", "text/html; charset=utf-8");
         String name = e.getClass().getSimpleName();
         log.error("shiro执行出错：{}", name);
         return new ResultMsg(Codes.SHIRO_ERR, "鉴权或者授权过程出错", null);
@@ -34,7 +38,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseBody
-    public ResultMsg page401(UnauthenticatedException e) {
+    public ResultMsg page401(UnauthenticatedException e, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("contentType", "text/html; charset=utf-8");
         String eMsg = e.getMessage();
         if (StringUtils.startsWithIgnoreCase(eMsg,GUEST_ONLY)){
             return new ResultMsg(Codes.UNAUTHEN, "只允许游客访问，若您已登录，请先退出登录", null)
@@ -48,8 +54,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
-    public ResultMsg page403() {
-        return new ResultMsg(Codes.UNAUTHZ, "用户没有访问权限", null);
+    public ResultMsg page403(HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("contentType", "text/html; charset=utf-8");
+        return new ResultMsg(Codes.UNAUTHZ, "用户没有访问权限", null
+        );
     }
 
 

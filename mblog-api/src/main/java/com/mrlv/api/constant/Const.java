@@ -12,15 +12,4 @@ public class Const {
         /** 接口 */
         int API = 3;
     }
-
-    public interface delType{
-        /**
-         * 有效
-         */
-        int DEL_VALID = 1;
-        /**
-         * 无效
-         */
-        int DEL_INVALID = 0;
-    }
 }

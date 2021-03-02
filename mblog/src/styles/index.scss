@@ -81,3 +81,180 @@ a:hover {
 .app-container {
   padding: 20px;
 }
+
+
+/** 以下皆为自定义样式 **/
+
+.row{
+  display: flex;
+  align-items: center;
+}
+.column{
+  display: flex;
+  flex-direction: column;
+}
+
+/** 换行 **/
+.flex-wrap{
+  flex-wrap: wrap;
+}
+.no-wrap{
+  flex-wrap: nowrap;
+}
+
+
+.justify-between{
+  justify-content: space-between;
+}
+.justify-around{
+  justify-content: space-around;
+}
+.justify-center{
+  justify-content: center;
+}
+
+.items-center{
+  align-items: center;
+}
+.items-start{
+  align-items: flex-start;
+}
+
+/*文本超出一行为省略号*/
+.overflow-ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/** 高度撑满和宽度撑满 **/
+.full-width, .fit{
+  width: 100%;
+}
+.full-height, .fit{
+  height: 100%;
+}
+
+/** **/
+.inline-block{
+  display: inline-block
+}
+
+/* 字体大小 像素 */
+.fs-16{
+  font-size: 16px
+}
+.fs-14{
+  font-size: 14px
+}
+.fs-13{
+  font-size: 13px
+}
+.fs-12{
+  font-size: 12px
+}
+/*边距*/
+.ml-xs, .mx-xs, .ma-xs{
+  margin-left: 4px;
+}
+.mr-xs, .mx-xs, .ma-xs{
+  margin-right: 4px;
+}
+.mt-xs, .my-xs, .ma-xs{
+  margin-top: 4px;
+}
+.mb-xs, .my-xs, .ma-xs{
+  margin-bottom: 4px;
+}
+
+.ml-sm, .mx-sm, .ma-sm{
+  margin-left: 8px;
+}
+.mr-sm, .mx-sm, .ma-sm{
+  margin-right: 8px;
+}
+.mt-sm, .my-sm, .ma-sm{
+  margin-top: 8px;
+}
+.mb-sm, .my-sm, .ma-sm{
+  margin-bottom: 8px;
+}
+
+.ml-md, .mx-md, .ma-md{
+  margin-left: 16px;
+}
+.mr-md, .mx-md, .ma-md{
+  margin-right: 16px;
+}
+.mt-md, .my-md, .ma-md{
+  margin-top: 16px;
+}
+.mb-md, .my-md, .ma-md{
+  margin-bottom: 16px;
+}
+
+.ml-lg, .mx-lg, .ma-lg{
+  margin-left: 32px;
+}
+.mr-lg, .mx-lg, .ma-lg{
+  margin-right: 32px;
+}
+.mt-lg, .my-lg, .ma-lg{
+  margin-top: 32px;
+}
+.mb-lg, .my-lg, .ma-lg{
+  margin-bottom: 32px;
+}
+
+.pl-xs, .px-xs, .pa-xs{
+  padding-left: 4px;
+}
+.pr-xs, .px-xs, .pa-xs{
+  padding-right: 4px;
+}
+.pt-xs, .py-xs, .pa-xs{
+  padding-top: 4px;
+}
+.pb-xs, .py-xs, .pa-xs{
+  padding-bottom: 4px;
+}
+
+.pl-sm, .px-sm, .pa-sm{
+  padding-left: 8px;
+}
+.pr-sm, .px-sm, .pa-sm{
+  padding-right: 8px;
+}
+.pt-sm, .py-sm, .pa-sm{
+  padding-top: 8px;
+}
+.pb-sm, .py-sm, .pa-sm{
+  padding-bottom: 8px;
+}
+
+.pl-md, .px-md, .pa-md{
+  padding-left: 16px;
+}
+.pr-md, .px-md, .pa-md{
+  padding-right: 16px;
+}
+.pt-md, .py-md, .pa-md{
+  padding-top: 16px;
+}
+.pb-md, .py-md, .pa-md{
+  padding-bottom: 16px;
+}
+
+.pl-lg, .px-lg, .pa-lg{
+  padding-left: 32px;
+}
+.pr-lg, .px-lg, .pa-lg{
+  padding-right: 32px;
+}
+.pt-lg, .py-lg, .pa-lg{
+  padding-top: 32px;
+}
+.pb-lg, .py-lg, .pa-lg{
+  padding-bottom: 32px;
+}
+

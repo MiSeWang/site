@@ -28,13 +28,12 @@ Vue.use(ElementUI, {
 //引入bus
 Vue.prototype.$bus = new Vue
 
-/* eslint-disable no-new */
+
 new Vue({
   el: '#app',
   router,
   store,
   components: { App },
   template: '<App/>'
-  // render: h => h(App)
 })
 

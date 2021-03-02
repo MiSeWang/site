@@ -81,6 +81,12 @@ export const asyncRouterMap = [
         meta: { perm: 'm:sys:perm', title: '权限管理', icon: 'chart', noCache: true }
 
       },
+      {
+        path: 'notice_manage',
+        name: 'notice_manage',
+        component: _import('system/notice/index'),
+        meta: { perm: 'm:sys:perm', title: '公告管理', icon: 'chart', noCache: true }
+      },
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

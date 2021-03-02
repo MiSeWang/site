@@ -2,6 +2,8 @@ package com.mrlv.api.service;
 
 import com.mrlv.api.entity.CmsArticle;
 import com.baomidou.mybatisplus.service.IService;
+import com.mrlv.api.entity.CmsArticleData;
+import com.mrlv.api.vo.ArticleDetailVO;
 import com.mrlv.api.vo.ArticleListVO;
 
 import java.util.List;
@@ -16,6 +18,14 @@ import java.util.List;
  */
 public interface ICmsArticleService extends IService<CmsArticle> {
 
+
+    /**
+     * 获取文章详情
+     * @param id
+     * @return
+     */
+    ArticleDetailVO queryArticleById(String id);
+
     /**
      * 获取文章列表
      * @return
@@ -24,7 +34,17 @@ public interface ICmsArticleService extends IService<CmsArticle> {
 
     /**
      * 新增文章
+     * @param cmsArticle
+     * @param cmsArticleData
      * @return
      */
-    Boolean saveArticle();
+    Boolean saveArticle(CmsArticle cmsArticle, CmsArticleData cmsArticleData);
+
+
+    /**
+     * 删除文章
+     * @param id
+     * @return
+     */
+    Boolean delArticle(String id);
 }

@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * 用户登录服务
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -107,7 +110,7 @@ public class AuthController {
             return  ResultMsg.createSuccess()
                     .data("loginName",sysUser.getLoginName())
                     .data("name",sysUser.getName())
-                    .data("avatar","")
+                    .data("photo","")
                     .data("roles", sysUser.getRoles())
                     .data("perms", sysUser.getPerms());
         }

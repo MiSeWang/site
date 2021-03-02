@@ -1,7 +1,7 @@
 package com.mrlv.api.service.impl;
 
 import com.mrlv.api.entity.CmsArticleDict;
-import com.mrlv.api.dao.CmsArticleDictMapper;
+import com.mrlv.api.mapper.CmsArticleDictMapper;
 import com.mrlv.api.service.ICmsArticleDictService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

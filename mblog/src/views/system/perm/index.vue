@@ -116,9 +116,9 @@
     methods: {
       getData(){
         let permType = { permType: this.permType }
-        permApi.queryPerm(permType).then(res => {
-          if (res.data.code == CodeType.DEFAULT_SUCC_CODE){
-            this.treeDate = res.data.data;
+        permApi.queryPerm(permType).then(result => {
+          if (result.code == CodeType.DEFAULT_SUCC_CODE){
+            this.treeDate = result.data;
           }
         })
       },

@@ -239,18 +239,18 @@
         this.roleModel.name = row.name, this.roleModel.remarks = row.remarks, this.roleModel.useable = row.useable;
         this.dialogStatus = 'update'; //对话框状态设置为创建
         permApi.queryPerm({permType: '1,2'}).then((result) => {    //获取Tree数据，只获取菜单和按钮
-          if (result.data.code == CodeType.DEFAULT_SUCC_CODE) {
-            this.treeDate = result.data.data;
+          if (result.code == CodeType.DEFAULT_SUCC_CODE) {
+            this.treeDate = result.data;
           }
         })
         permApi.queryPerm({permType: '3'}).then((result) => {     //获取Tree数据，只获取菜单和按钮
-          if (result.data.code == CodeType.DEFAULT_SUCC_CODE) {
-            this.treeDateInterface = result.data.data;
+          if (result.code == CodeType.DEFAULT_SUCC_CODE) {
+            this.treeDateInterface = result.data;
           }
         })
         roleApi.queryPermIdsByRoleId({roleId: row.id}).then((result) => {  //获取角色基本信息
-          if (result.data.code == CodeType.DEFAULT_SUCC_CODE) {
-            this.roleModel.perms = result.data.data;
+          if (result.code == CodeType.DEFAULT_SUCC_CODE) {
+            this.roleModel.perms = result.data;
           }
         })
         this.$nextTick(() => {        //立刻更新DOM
@@ -278,10 +278,10 @@
             return value.id
           }))
           roleApi.addRole(this.roleModel).then((res) => {
-            if (res.data.code == CodeType.DEFAULT_SUCC_CODE) {
-              this.$message.success(res.data.msg)
+            if (res.code == CodeType.DEFAULT_SUCC_CODE) {
+              this.$message.success(res.msg)
             } else {
-              this.$message.error(res.data.msg)
+              this.$message.error(res.msg)
             }
             this.dialogFormVisible = false  //关闭对话框验证
             this.getData()
@@ -303,10 +303,10 @@
             return value.id
           }))
           roleApi.updateRole(this.roleModel).then((res) => {
-            if (res.data.code == CodeType.DEFAULT_SUCC_CODE) {
-              this.$message.success(res.data.msg)
+            if (res.code == CodeType.DEFAULT_SUCC_CODE) {
+              this.$message.success(res.msg)
             } else {
-              this.$message.error(res.data.msg)
+              this.$message.error(res.msg)
             }
             this.dialogFormVisible = false  //关闭对话框验证
             this.getData()
@@ -326,11 +326,11 @@
           } else {
             data = {id: row.id, isBatch: false}
           }
-          roleApi.deleteRole(data).then(response => {
-            if(response.data.code == 200) {
-              this.$message.success(response.data.msg)
+          roleApi.deleteRole(data).then(result => {
+            if(result.code == 200) {
+              this.$message.success(result.msg)
             } else {
-              this.$message.error(response.data.msg)
+              this.$message.error(result.msg)
             }
             this.getData()
           })

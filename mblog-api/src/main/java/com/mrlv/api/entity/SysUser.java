@@ -25,12 +25,12 @@ public class SysUser extends Model<SysUser> {
     private String email;      //邮箱
     private String phone;     //手机号码
     private Integer userType;  //用户类型
-    private String avatar;      //头像
+    private String photo;      //头像
     private String loginIp;    //登陆ip
-    private Date loginDate;    //登陆时间
-    private Integer loginFlag; //是否启用
-    private Date createDate;   //创建时间
-    private Date updateDate;   //更新时间
+    private Date loginTime;    //登陆时间
+    private Integer status; //是否启用
+    private Date createTime;   //创建时间
+    private Date updateTime;   //更新时间
     private String remarks;    //说明
     private Integer delFlag;   //是否删除
 
@@ -103,12 +103,12 @@ public class SysUser extends Model<SysUser> {
         this.userType = userType;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getLoginIp() {
@@ -119,36 +119,36 @@ public class SysUser extends Model<SysUser> {
         this.loginIp = loginIp;
     }
 
-    public Date getLoginDate() {
-        return loginDate;
+    public Date getLoginTime() {
+        return loginTime;
     }
 
-    public void setLoginDate(Date loginDate) {
-        this.loginDate = loginDate;
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
     }
 
-    public Integer getLoginFlag() {
-        return loginFlag;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setLoginFlag(Integer loginFlag) {
-        this.loginFlag = loginFlag;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getRemarks() {

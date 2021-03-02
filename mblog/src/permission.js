@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
         // 用户刷新页面会导致vuex状态清空，或者用户首次登录，vuex中还没有权限信息。都要调用后台接口获得用户信息
         store.dispatch('GetUserInfo').then(res => {
           // 注意:权限必须是数组! such as: [{name:'菜单1',val:'menu:1'}]
-          const perms = res.data.perms
+          const perms = res.perms
           // 根据roles权限生成可访问的路由表
           store.dispatch('GenerateRoutes', {perms}).then(() => {
             // 动态添加可访问路由表

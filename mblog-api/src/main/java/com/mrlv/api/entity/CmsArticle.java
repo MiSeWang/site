@@ -82,23 +82,23 @@ public class CmsArticle extends Model<CmsArticle> {
     /**
      * 创建者
      */
-    @TableField("create_by")
-    private String createBy;
+    @TableField("creator")
+    private String creator;
     /**
      * 创建时间
      */
-    @TableField("create_date")
-    private Date createDate;
+    @TableField("create_time")
+    private Date createTime;
     /**
      * 更新者
      */
-    @TableField("update_by")
-    private String updateBy;
+    @TableField("updater")
+    private String updater;
     /**
      * 更新时间
      */
-    @TableField("update_date")
-    private Date updateDate;
+    @TableField("update_time")
+    private Date updateTime;
     /**
      * 备注消息
      */
@@ -222,36 +222,36 @@ public class CmsArticle extends Model<CmsArticle> {
         this.viewConfig = viewConfig;
     }
 
-    public String getCreateBy() {
-        return createBy;
+    public String getCreator() {
+        return creator;
     }
 
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getUpdateBy() {
-        return updateBy;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getRemarks() {
@@ -292,10 +292,10 @@ public class CmsArticle extends Model<CmsArticle> {
         ", posid=" + posid +
         ", customContentView=" + customContentView +
         ", viewConfig=" + viewConfig +
-        ", createBy=" + createBy +
-        ", createDate=" + createDate +
-        ", updateBy=" + updateBy +
-        ", updateDate=" + updateDate +
+        ", creator=" + creator +
+        ", createTime=" + createTime +
+        ", updater=" + updater +
+        ", updateTime=" + updateTime +
         ", remarks=" + remarks +
         ", delFlag=" + delFlag +
         "}";

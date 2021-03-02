@@ -23,13 +23,13 @@ public class SysUserListVO {
 
     private String phone;
 
-    private String avatar;
+    private String photo;
 
-    private Integer loginFlag;
+    private Integer status;
 
-    private Date createDate;
+    private Date createTime;
 
-    private Date updateDate;
+    private Date updateTime;
 
     private String loginIp;
 

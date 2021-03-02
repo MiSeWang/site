@@ -2,7 +2,7 @@ package com.mrlv.api.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.mrlv.api.dao.SysPermMapper;
+import com.mrlv.api.mapper.SysPermMapper;
 import com.mrlv.api.entity.SysPerm;
 import com.mrlv.api.service.ISysPermService;
 import com.mrlv.api.vo.AuthVo;

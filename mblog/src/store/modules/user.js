@@ -176,12 +176,11 @@ const user = {
           setToken("Test_Token")
           resolve()
         }
-        authApi.login(loginName, userInfo.password).then(response => {
-          const data = response.data
+        authApi.login(loginName, userInfo.password).then((result) => {
           //修改store中的token
-          commit('SET_TOKEN', data.token)
+          commit('SET_TOKEN', result.token)
           //修改cookie中的token
-          setToken(data.token)
+          setToken(result.token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -199,26 +198,26 @@ const user = {
           commit('SET_PERMS', [{name: "所有权限", val: "*"}]);
           commit('SET_LOGIN_NAME', "测试用户名");
           commit('SET_NAME', "测试名字");
-          dispatch('InitSocket', "Test");
+          // dispatch('InitSocket', "Test");
           resolve({data: {perms: [{name: "所有权限", val: "*"}]}})
         } else {
-          authApi.getUserInfo(state.token).then(response => {
-            if (!response) reject('response is null');
-            if (!response.data) reject('response.data is null');
+          authApi.getUserInfo(state.token).then((result) => {
+            console.log(result)
+            if (!result) reject('response is null');
             //如果不在这里加判断，会陷入无限循环
-            if (!response.data.perms || response.data.perms.length == 0
-              || !response.data.perms || response.data.perms.length == 0) {
+            if (!result.perms || result.perms.length == 0
+              || !result.perms || result.perms.length == 0) {
               commit('SET_VISITOR', true)   //给予游客身份
             } else {
               commit('SET_VISITOR', false)  //给予非游客身份
             }
             //赋予基本信息
-            commit('SET_ROLES', response.data.roles)
-            commit('SET_PERMS', response.data.perms)
-            commit('SET_LOGIN_NAME', response.data.loginName);
-            commit('SET_NAME', response.data.name);
-            dispatch('InitSocket', response.data.loginName);
-            resolve(response)
+            commit('SET_ROLES', result.roles)
+            commit('SET_PERMS', result.perms)
+            commit('SET_LOGIN_NAME', result.loginName);
+            commit('SET_NAME', result.name);
+            // dispatch('InitSocket', response.data.loginName);
+            resolve(result)
           }).catch(error => {
             reject(error)
           })
@@ -232,7 +231,7 @@ const user = {
         authApi.logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
-          commit('COLOR_SOCKET');//关闭
+          // commit('COLOR_SOCKET');//关闭
           removeToken()
           resolve()
         }).catch(error => {
@@ -245,7 +244,7 @@ const user = {
     FedLogOut({commit}) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
-        commit('COLOR_SOCKET');//关闭
+        // commit('COLOR_SOCKET');//关闭
         removeToken()
         resolve()
       })

@@ -1,6 +1,5 @@
 package com.mrlv.api.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
@@ -40,12 +39,12 @@ public class CmsArticleDict extends Model<CmsArticleDict> {
     /**
      * 排序
      */
-    private BigDecimal sort;
+    private Integer sort;
     /**
      * 创建者
      */
-    @TableField("create_by")
-    private String createBy;
+    @TableField("creator")
+    private String creator;
     /**
      * 创建时间
      */
@@ -54,8 +53,8 @@ public class CmsArticleDict extends Model<CmsArticleDict> {
     /**
      * 更新者
      */
-    @TableField("update_by")
-    private String updateBy;
+    @TableField("updater")
+    private String updater;
     /**
      * 更新时间
      */
@@ -112,20 +111,20 @@ public class CmsArticleDict extends Model<CmsArticleDict> {
         this.description = description;
     }
 
-    public BigDecimal getSort() {
+    public Integer getSort() {
         return sort;
     }
 
-    public void setSort(BigDecimal sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
 
-    public String getCreateBy() {
-        return createBy;
+    public String getCreator() {
+        return creator;
     }
 
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public Date getCreateDate() {
@@ -136,12 +135,12 @@ public class CmsArticleDict extends Model<CmsArticleDict> {
         this.createDate = createDate;
     }
 
-    public String getUpdateBy() {
-        return updateBy;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public Date getUpdateDate() {
@@ -182,9 +181,9 @@ public class CmsArticleDict extends Model<CmsArticleDict> {
         ", type=" + type +
         ", description=" + description +
         ", sort=" + sort +
-        ", createBy=" + createBy +
+        ", creator=" + creator +
         ", createDate=" + createDate +
-        ", updateBy=" + updateBy +
+        ", updater=" + updater +
         ", updateDate=" + updateDate +
         ", remarks=" + remarks +
         ", delFlag=" + delFlag +
