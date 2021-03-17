@@ -97,7 +97,7 @@ public class SysUserController {
                 }
                 SysUser user = new SysUser();
                 user.setId(id);
-                user.setDelFlag(DelFlag.DEL_INVALID.getValue());
+                user.setDelFlag(DelFlag.AL_DEL.value());
                 users.add(user);
             }
             return ResultMsg.result(sysUserService.updateBatchById(users));
@@ -111,7 +111,7 @@ public class SysUserController {
             }
             SysUser user = new SysUser();
             user.setId(id);
-            user.setDelFlag(DelFlag.DEL_INVALID.getValue());
+            user.setDelFlag(DelFlag.AL_DEL.value());
             return ResultMsg.result(sysUserService.updateById(user));
         }
     }

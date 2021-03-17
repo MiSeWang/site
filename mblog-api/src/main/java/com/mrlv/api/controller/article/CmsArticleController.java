@@ -87,7 +87,7 @@ public class CmsArticleController {
             return ResultMsg.createSuccessData(cmsArticleService.delArticle(cmsArticle.getId()));
 
         } else {
-            cmsArticle.setDelFlag(DelFlag.DEL_INVALID.getValue());
+            cmsArticle.setDelFlag(DelFlag.AL_DEL.value());
             cmsArticle.setUpdater(user.getLoginName());
             cmsArticle.setUpdateTime(date);
             return ResultMsg.createSuccessData(cmsArticleService.updateById(cmsArticle));

@@ -123,11 +123,11 @@ public class SysRoleController {
             JSONObject jsonObject = JSONObject.parseObject(body);
             if (jsonObject.getBoolean("isBatch")) {
                 List<String> ids = JSONObject.parseArray(jsonObject.getString("ids"), String.class);
-                List<SysRole> collect = ids.stream().map((e) -> new SysRole(e, DelFlag.DEL_INVALID.getValue())).collect(Collectors.toList());
+                List<SysRole> collect = ids.stream().map((e) -> new SysRole(e, DelFlag.AL_DEL.value())).collect(Collectors.toList());
                 sysRoleService.updateBatchById(collect);
             } else {
                 String id = jsonObject.getString("id");
-                sysRoleService.updateById(new SysRole(id, DelFlag.DEL_INVALID.getValue()));
+                sysRoleService.updateById(new SysRole(id, DelFlag.AL_DEL.value()));
             }
             return ResultMsg.createSuccessMessage("删除成功");
         } catch (Exception e) {
