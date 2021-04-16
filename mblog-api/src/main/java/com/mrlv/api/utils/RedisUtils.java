@@ -7,7 +7,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -218,7 +220,7 @@ public class RedisUtils {
         try {
             redisTemplate.opsForHash().putAll(key, map);
             if (time > 0) {
-                expire(key, time);
+               // expire(key, time);
             }
             return true;
         } catch (Exception e) {
@@ -258,7 +260,7 @@ public class RedisUtils {
         try {
             redisTemplate.opsForHash().put(key, item, value);
             if (time > 0) {
-                expire(key, time);
+                //expire(key, time);
             }
             return true;
         } catch (Exception e) {
@@ -372,8 +374,8 @@ public class RedisUtils {
     public long sSetAndTime(String key, long time, Object... values) {
         try {
             Long count = redisTemplate.opsForSet().add(key, values);
-            if (time > 0)
-                expire(key, time);
+            if (time > 0){}
+                //expire(key, time);
             return count;
         } catch (Exception e) {
             log.error(key, e);
@@ -466,8 +468,8 @@ public class RedisUtils {
     public long zSSetAndTime(String key, long time, Object... values) {
         try {
             Long count = redisTemplate.opsForSet().add(key, values);
-            if (time > 0)
-                expire(key, time);
+            if (time > 0){}
+                //expire(key, time);
             return count;
         } catch (Exception e) {
             log.error(key, e);
@@ -586,7 +588,7 @@ public class RedisUtils {
         try {
             redisTemplate.opsForList().rightPush(key, value);
             if (time > 0) {
-                expire(key, time);
+                //expire(key, time);
             }
             return true;
         } catch (Exception e) {
@@ -624,7 +626,7 @@ public class RedisUtils {
         try {
             redisTemplate.opsForList().rightPushAll(key, value);
             if (time > 0) {
-                expire(key, time);
+                //expire(key, time);
             }
             return true;
         } catch (Exception e) {

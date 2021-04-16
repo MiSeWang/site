@@ -16,8 +16,8 @@ public class TestCallable {
         //result.isDone()
         new Thread(result).start();
         try {
-            Integer integer = result.get(); //当上面的线程执行完后，才会打印结果。跟闭锁一样。所有futureTask也可以用于闭锁
-            //Integer integer = result.get(); 线程只会执行一次，重新开线程去启动方法不会重新执行。
+            Integer integer = result.get();     //当上面的线程执行完后，才会打印结果。跟闭锁一样。所有futureTask也可以用于闭锁
+            //Integer integer = result.get();   //线程只会执行一次，重新开线程去启动方法不会重新执行。
             System.out.println(integer);
         } catch (InterruptedException e) {
             e.printStackTrace();

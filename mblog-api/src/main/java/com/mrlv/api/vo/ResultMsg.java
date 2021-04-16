@@ -1,7 +1,11 @@
 package com.mrlv.api.vo;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.HashMap;
 
+
+@ApiModel( description="返回值model")
 public class ResultMsg extends HashMap<String, Object> {
     /////////////////////// 默认的键 ///////////////////////
     public static final String KEY_CODE = "code";

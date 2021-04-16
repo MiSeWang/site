@@ -4,7 +4,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class TestSemaphore {
-
     public static void main(String[] args) {
         Semaphore semaphore = new Semaphore(3);
         for (int i = 0; i < 6; i++) {

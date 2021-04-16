@@ -12,12 +12,14 @@ import com.mrlv.api.service.ISysRoleService;
 import com.mrlv.api.service.ISysUserService;
 import com.mrlv.api.vo.ResultMsg;
 import com.mrlv.api.vo.SysUserListVO;
+import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,7 @@ import java.util.List;
  */
 @RequestMapping("/sysUser")
 @RestController
+@Api(tags = "用户管理")
 public class SysUserController {
 
     private static final Logger log = LoggerFactory.getLogger(SysUserController.class);
@@ -43,13 +46,21 @@ public class SysUserController {
      * @return
      */
     @GetMapping("/queryUsers")
+    @ApiOperation("查询用户")
     public ResultMsg queryUsers(){
         List<SysUserListVO> sysUserListVOs = sysUserService.queryUsers();
         return ResultMsg.createSuccessDatas("page", sysUserListVOs);
     }
 
     @PostMapping("/saveUser")
-    public ResultMsg saveUser(@RequestBody String body){
+    @ApiOperation("保存用户")
+    //@ApiIgnore    //忽略，不生产api帮助文档
+    @ApiImplicitParam(name="zzz", value = "v描述", required = false, paramType = "字符串", dataType = "假数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="xxx", value = "x描述", required = false, paramType = "字符串", dataType = "假数据"),
+            @ApiImplicitParam(name="ccc", value = "c描述", required = false, paramType = "字符串", dataType = "假数据")
+    })
+    public ResultMsg saveUser(@ApiParam(name="用户json数据", value = "{}", required = true) @RequestBody String body){
         Date date = new Date();
         SysUser sysUser = JSON.parseObject(body, SysUser.class);
         JSONArray roleIds = JSONObject.parseObject(body).getJSONArray("roleArray");
@@ -80,6 +91,7 @@ public class SysUserController {
     }
 
     @PostMapping("/delUser")
+    @ApiOperation("移除用户")
     public ResultMsg delUser(@RequestBody String body){
         String oper = "delete user";
         log.info("{}, body: {}", oper, "");

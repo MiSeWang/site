@@ -1,7 +1,7 @@
 package com.mrlv.juc;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.IOException;
+import java.util.concurrent.*;
 
 /***
  * 我们使用线程时，需要new一个，用完了又要销毁，这样频繁的创建销毁也很耗资源，所以就提供了线程池。
@@ -12,13 +12,82 @@ import java.util.concurrent.Executors;
 public class TestThreadPool {
 
     public static void main(String[] args) {
-        ThreadPoolDemo threadPoolDemo = new ThreadPoolDemo();
+
+        testCallerRunsPolicy();
+
+    }
+
+    public static void testCallerRunsPolicy(){
         //1.创建线程池
-        ExecutorService pool = Executors.newFixedThreadPool(5);
+        ExecutorService fixedThreadPool = new ThreadPoolExecutor(1, 1,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(1),
+                new ThreadPoolExecutor.CallerRunsPolicy());
         //2.为线程池中的线程分配任务
-        pool.submit(threadPoolDemo);
+        fixedThreadPool.submit(() -> {
+            try {
+                System.out.println(Thread.currentThread() + ":老一启动");
+                TimeUnit.SECONDS.sleep(10);
+                System.out.println(Thread.currentThread() + ":老一结束");
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        });
+        fixedThreadPool.submit(() -> {
+            try {
+                System.out.println(Thread.currentThread() + ":老二启动");
+                TimeUnit.SECONDS.sleep(10);
+                System.out.println(Thread.currentThread() + ":老二结束");
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        });
+        fixedThreadPool.submit(() -> {
+            try {
+                System.out.println(Thread.currentThread() + ":老三启动");
+                TimeUnit.SECONDS.sleep(5);
+                System.out.println(Thread.currentThread() + ":老三结束");
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        });
+        fixedThreadPool.submit(() -> {
+            try {
+                System.out.println(Thread.currentThread() + ":老四启动");
+                TimeUnit.SECONDS.sleep(10);
+                System.out.println(Thread.currentThread() + ":老四结束");
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        });
         //3.关闭线程池
-        pool.shutdown();
+        fixedThreadPool.shutdown();
+        System.out.println("!111");
+    }
+
+    public void testFixedThreadPool(){
+        //1.创建线程池
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);     //一池5个处理线程
+        //2.为线程池中的线程分配任务
+        fixedThreadPool.submit(new ThreadPoolDemo());
+        //3.关闭线程池
+        fixedThreadPool.shutdown();
+    }
+    public void testSingleThreadExecutor(){
+        //1.创建线程池
+        ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();     //一池1个处理线程
+        //2.为线程池中的线程分配任务
+        singleThreadExecutor.submit(new ThreadPoolDemo());
+        //3.关闭线程池
+        singleThreadExecutor.shutdown();
+    }
+    public void testCachedThreadPool(){
+        //1.创建线程池
+        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();             //一池N个处理线程
+        //2.为线程池中的线程分配任务
+        cachedThreadPool.submit(new ThreadPoolDemo());
+        //3.关闭线程池
+        cachedThreadPool.shutdown();
     }
 }
 
